@@ -1,0 +1,323 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum RoleStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Role {
+  id              String           @id @default(uuid())
+  name            String           @unique
+  status          RoleStatus       @default(ACTIVE)
+  isDeleted       Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  roleFeature     RoleFeature[]
+  departmentHeads DepartmentHead[]
+}
+
+model RoleFeature {
+  id     String @id @default(uuid())
+  name   String
+  index  Int
+  path   String
+  roleId String
+  role   Role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  blogs     Blog[]
+  projects  Project[]
+  services  Service[]
+}
+
+model Blog {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.LongText
+  categoryId  String
+  categories  Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  thumbnail   String?  @db.LongText
+  tags        Tag[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String
+  blogId    String
+  blog      Blog     @relation(fields: [blogId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Subscriber {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Contact {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String
+  subject   String
+  message   String   @db.LongText
+  isOpened  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AdminContact {
+  id           String   @id @default(uuid())
+  phone        String   @unique
+  email        String   @unique
+  address      String   @db.Text
+  facebookUrl  String?  @db.Text
+  linkedinUrl  String?  @db.Text
+  instagramUrl String?  @db.Text
+  xUrl         String?  @db.Text
+  discordUrl   String?  @db.Text
+  googleMapUrl String?  @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Project {
+  id                                String    @id @default(uuid())
+  title                             String
+  description                       String    @db.LongText
+  businessStrategy                  String?   @db.LongText
+  visionAndGoal                     String?   @db.LongText
+  operationalAndProcessOptimization String?   @db.LongText
+  projectSolution                   String?   @db.LongText
+  projectBusinessStrategy           String?   @db.LongText
+  categoryId                        String
+  category                          Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  client                            String?
+  startDate                         DateTime?
+  endDate                           DateTime?
+  thumbnail                         String    @db.LongText
+  thumbnailOptional1                String?   @db.LongText
+  thumbnailOptional2                String?   @db.LongText
+  createdAt                         DateTime  @default(now())
+  updatedAt                         DateTime  @updatedAt
+}
+
+model Service {
+  id                    String                 @id @default(uuid())
+  title                 String
+  description           String                 @db.LongText
+  serviceOffer          String?                @db.LongText
+  serviceSolution       String?                @db.LongText
+  serviceOptimization   String?                @db.LongText
+  categoryId            String
+  category              Category               @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  thumbnail             String                 @db.LongText
+  thumbnailOptional1    String?                @db.LongText
+  thumbnailOptional2    String?                @db.LongText
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  serviceOfferKeyPoints ServiceOfferKeyPoint[]
+}
+
+model ServiceOfferKeyPoint {
+  id           String   @id @default(uuid())
+  point        String
+  serviceId    String
+  serviceOffer Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum DepartmentHeadStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model DepartmentHead {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  phone        String   @unique
+  designation  String
+  linkedinUrl  String?  @db.Text
+  facebookUrl  String?  @db.Text
+  instagramUrl String?  @db.Text
+  xUrl         String?  @db.Text
+  password     String   @db.Text
+  roleId       String
+  role         Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  profilePhoto String?  @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Employ {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  phone        String   @unique
+  designation  String
+  linkedinUrl  String?  @db.Text
+  facebookUrl  String?  @db.Text
+  instagramUrl String?  @db.Text
+  xUrl         String?  @db.Text
+  profilePhoto String?  @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Testimonial {
+  id           String   @id @default(uuid())
+  name         String
+  description  String   @db.LongText
+  designation  String?
+  rating       Int
+  profilePhoto String?  @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Partnership {
+  id        String   @id @default(uuid())
+  brandName String?
+  url       String?  @db.LongText
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum FaqStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Faq {
+  id        String    @id @default(uuid())
+  question  String
+  answer    String
+  status    FaqStatus @default(ACTIVE)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Banner {
+  id          String   @id @default(uuid())
+  title       String
+  subTitle    String
+  description String?  @db.LongText
+  sideImage1  String?  @db.LongText
+  sideImage2  String?  @db.LongText
+  logo        String?  @db.LongText
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AboutHome {
+  id               String   @id @default(uuid())
+  title            String
+  description      String   @db.LongText
+  numberOfProjects Int?
+  numberOfClients  Int?
+  sideImage1       String?  @db.LongText
+  sideImage2       String?  @db.LongText
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model AboutHomeKeyPoint {
+  id        String   @id @default(uuid())
+  point     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AboutDetails {
+  id          String   @id @default(uuid())
+  experience  Int
+  title       String
+  description String   @db.LongText
+  vision      String   @db.LongText
+  mission     String   @db.LongText
+  values      String   @db.LongText
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Footer {
+  id          String   @id @default(uuid())
+  description String   @db.LongText
+  copyright   String   @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TermsAndCondition {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.LongText
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model PrivacyPolicy {
+  id          String   @id @default(uuid())
+  title       String
+  description String   @db.LongText
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  FREELANCE
+  TEMPORARY
+  VOLUNTEER
+  APPRENTICESHIP
+}
+
+model JobCircular {
+  id                     String   @id @default(uuid())
+  jobTitle               String
+  jobType                JobType
+  whatYouWillDo          String   @db.LongText
+  jobResponsibilities    String   @db.LongText
+  experienceRequired     String   @db.LongText
+  additionalRequirements String   @db.LongText
+  experience             Int
+  workingHours           Int
+  workingDays            Int
+  salary                 String
+  vacancy                Int
+  deadline               DateTime
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+model SpecializedIndustry {
+  id          String   @id @default(uuid())
+  name        String
+  icon        String   @db.LongText
+  description String   @db.LongText
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+
