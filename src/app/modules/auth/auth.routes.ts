@@ -85,7 +85,9 @@ router.post(
  *               - name
  *               - email
  *               - password
- *               - departmentId
+ *               - roleId
+ *               - phone
+ *               - designation
  *             properties:
  *               name:
  *                 type: string
@@ -97,9 +99,15 @@ router.post(
  *               password:
  *                 type: string
  *                 example: "password123"
- *               departmentId:
+ *               phone:
  *                 type: string
- *                 example: "dept123"
+ *                 example: "+8801307628955"
+ *               designation:
+ *                 type: string
+ *                 example: "Software Engineer"
+ *               roleId:
+ *                 type: string
+ *                 example: "role123"
  *               profilePhoto:
  *                 type: string
  *                 format: binary
