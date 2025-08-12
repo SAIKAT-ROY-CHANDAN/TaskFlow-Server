@@ -233,6 +233,62 @@ components:
           format: date-time
           example: '2024-01-15T10:30:00Z'
 
+    AdminContact:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '123e4567-e89b-12d3-a456-426614174007'
+        phone:
+          type: string
+          example: '+1234567890'
+        email:
+          type: string
+          format: email
+          example: 'admin@company.com'
+        address:
+          type: string
+          example: '123 Main St, City, Country'
+        facebookUrl:
+          type: string
+          format: uri
+          nullable: true
+          example: 'https://facebook.com/company'
+        linkedinUrl:
+          type: string
+          format: uri
+          nullable: true
+          example: 'https://linkedin.com/company/company'
+        instagramUrl:
+          type: string
+          format: uri
+          nullable: true
+          example: 'https://instagram.com/company'
+        xUrl:
+          type: string
+          format: uri
+          nullable: true
+          example: 'https://x.com/company'
+        discordUrl:
+          type: string
+          format: uri
+          nullable: true
+          example: 'https://discord.gg/company'
+        googleMapUrl:
+          type: string
+          format: uri
+          nullable: true
+          example: 'https://maps.google.com/?q=company+location'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2024-01-15T10:30:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2024-01-15T10:30:00Z'
+
     # Input/Request DTOs
     CreateRoleRequest:
       type: object

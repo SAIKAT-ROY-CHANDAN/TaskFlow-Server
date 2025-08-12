@@ -5,6 +5,8 @@ import { RoleRoutes } from '../modules/role/role.routes';
 import { CategoryRoutes } from '../modules/category/category.routes';
 import { BlogRoutes } from '../modules/blog/blog.routes';
 import { SubscriberRoutes } from '../modules/subscriber/subscriber.routes';
+import { ContactRoutes } from '../modules/contact/contact.routes';
+import { AdminContactRoutes } from '../modules/admin-contact/admin-contact.routes';
 
 const router = Router();
 
@@ -28,6 +30,14 @@ const moduleRoutes: TModuleRoute[] = [
   {
     path: '/subscribers',
     route: SubscriberRoutes,
+  },
+  {
+    path: '/contacts',
+    route: ContactRoutes,
+  },
+  {
+    path: '/admin-contacts',
+    route: AdminContactRoutes,
   },
 ];
 
