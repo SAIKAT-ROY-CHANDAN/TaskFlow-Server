@@ -26,7 +26,7 @@ const auth = (requiredFeatures?: string[]) => {
 
     const { email } = decoded;
 
-    const user = await prisma.adminUser.findFirst({
+    const user = await prisma.departmentHead.findFirst({
       where: {
         email,
       },
