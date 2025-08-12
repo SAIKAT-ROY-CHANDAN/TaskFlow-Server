@@ -4,6 +4,7 @@ import { AuthRoutes } from '../modules/auth/auth.routes';
 import { RoleRoutes } from '../modules/role/role.routes';
 import { CategoryRoutes } from '../modules/category/category.routes';
 import { BlogRoutes } from '../modules/blog/blog.routes';
+import { SubscriberRoutes } from '../modules/subscriber/subscriber.routes';
 
 const router = Router();
 
@@ -23,6 +24,10 @@ const moduleRoutes: TModuleRoute[] = [
   {
     path: '/blogs',
     route: BlogRoutes,
+  },
+  {
+    path: '/subscribers',
+    route: SubscriberRoutes,
   },
 ];
 

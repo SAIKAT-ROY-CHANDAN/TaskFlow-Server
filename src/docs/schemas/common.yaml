@@ -178,6 +178,26 @@ components:
           format: date-time
           example: '2024-01-15T10:30:00Z'
 
+    Subscriber:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '123e4567-e89b-12d3-a456-426614174006'
+        email:
+          type: string
+          format: email
+          example: 'subscriber@example.com'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2024-01-15T10:30:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2024-01-15T10:30:00Z'
+
     Contact:
       type: object
       properties:
