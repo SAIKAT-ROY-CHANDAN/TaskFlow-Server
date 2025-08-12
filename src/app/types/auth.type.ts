@@ -5,8 +5,7 @@ export type TLogin = {
 
 export type TJwtPayload = {
   email: string;
-  fullName: string;
+  name: string;
   role: string;
-  status: string;
   id?: string;
 };

@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 
 export const seedRoleAdmin = async () => {
   const existingRole = await prisma.role.findFirst();
-  const existingAdmin = await prisma.adminUser.findFirst();
+  const existingAdmin = await prisma.departmentHead.findFirst();
 
   if (!existingRole && !existingAdmin) {
     prisma.$transaction(async (prisma) => {
@@ -26,11 +26,13 @@ export const seedRoleAdmin = async () => {
 
       const hashedPassword = await bcrypt.hash(configs.password as string, 10);
 
-      await prisma.adminUser.create({
+      await prisma.departmentHead.create({
         data: {
-          fullName: configs.adminFullName as string,
+          name: configs.adminFullName as string,
           email: configs.adminEmail as string,
           password: hashedPassword,
+          designation: 'CEO',
+          phone: configs.phone as string,
           roleId: createRole.id,
         },
       });

@@ -20,7 +20,7 @@ router.post(
   imageUpload.single('profilePhoto'),
   uploadImages,
   validation(authValidations.registerValidation),
-  AuthController.register,
+  AuthController.createDepartmentHead,
 );
 
 router.post('/forget-password', AuthController.forgetPassword);
@@ -37,31 +37,25 @@ router.post(
 router.post('/refresh-token', AuthController.refreshAccessToken);
 
 router.get(
-  '/admin-users',
+  '/department-heads',
   // auth([featureNames.profile]),
-  AuthController.getAdminUsers,
+  AuthController.getDepartmentHeads,
 );
 
-router.get('/me', auth([]), AuthController.getLoggedAdminDetails);
+router.get('/me', auth([]), AuthController.getLoggedDepartmentHeadDetails);
 
 router.put(
   '/update-profile',
   auth([featureNames.profile]),
   imageUpload.single('profilePhoto'),
   uploadImages,
-  AuthController.updateProfile,
-);
-
-router.put(
-  '/admin-users/:id/status',
-  auth([featureNames.profile]),
-  AuthController.changeAdminUserStatus,
+  AuthController.updateDepartmentHeadProfile,
 );
 
 router.delete(
-  '/admin-users/:id',
+  '/department-heads/:id',
   auth([featureNames.profile]),
-  AuthController.deleteAdminUser,
+  AuthController.deleteDepartmentHead,
 );
 
 export const AuthRoutes = router;
