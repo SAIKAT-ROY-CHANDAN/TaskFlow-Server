@@ -141,7 +141,7 @@ router.post(
  */
 router.post(
   '/register',
-  auth([featureNames.profile]),
+  auth([featureNames.managements]),
   imageUpload.single('profilePhoto'),
   uploadImages,
   validation(authValidations.registerValidation),
@@ -291,7 +291,7 @@ router.post('/reset-password', AuthController.resetPassword);
  */
 router.post(
   '/change-password',
-  auth([featureNames.settings]),
+  auth([featureNames.managements]),
   validation(authValidations.changePasswordValidation),
   AuthController.changePassword,
 );
@@ -466,7 +466,7 @@ router.get('/me', auth([]), AuthController.getLoggedDepartmentHeadDetails);
  */
 router.put(
   '/update-profile',
-  auth([featureNames.profile]),
+  auth([featureNames.managements]),
   imageUpload.single('profilePhoto'),
   uploadImages,
   AuthController.updateDepartmentHeadProfile,
@@ -517,7 +517,7 @@ router.put(
  */
 router.delete(
   '/department-heads/:id',
-  auth([featureNames.profile]),
+  auth([featureNames.managements]),
   AuthController.deleteDepartmentHead,
 );
 

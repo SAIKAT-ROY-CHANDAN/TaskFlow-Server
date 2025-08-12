@@ -68,7 +68,7 @@ const router = Router();
  */
 router.post(
   '/',
-  auth([featureNames.profile]),
+  auth([featureNames.roleManagement]),
   validation(RoleValidation.createRoleValidation),
   RoleController.createRole,
 );
@@ -167,7 +167,7 @@ router.get('/', RoleController.getRoles);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/:id', auth([featureNames.profile]), RoleController.getRoleById);
+router.get('/:id', auth([featureNames.roleManagement]), RoleController.getRoleById);
 
 /**
  * @swagger
@@ -240,7 +240,7 @@ router.get('/:id', auth([featureNames.profile]), RoleController.getRoleById);
  */
 router.put(
   '/:id',
-  auth([featureNames.profile]),
+  auth([featureNames.roleManagement]),
   validation(RoleValidation.updateRoleValidation),
   RoleController.updateRole,
 );
@@ -288,6 +288,6 @@ router.put(
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/:id', auth([featureNames.profile]), RoleController.deleteRole);
+router.delete('/:id', auth([featureNames.roleManagement]), RoleController.deleteRole);
 
 export const RoleRoutes = router;
