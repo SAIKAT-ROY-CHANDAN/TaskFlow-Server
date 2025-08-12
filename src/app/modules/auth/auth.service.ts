@@ -1,4 +1,3 @@
-import { AdminUser, AdminUserStatus } from '@prisma/client';
 import prisma from '../../../db/db.config';
 import bcrypt from 'bcryptjs';
 import { TLogin } from '../../types/auth.type';
@@ -9,11 +8,12 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { sendEmail } from '../../utils/sendEmail';
 import { builderQuery } from '../../builders/prismaBuilderQuery';
 import { deleteImageFile } from '../../utils/deleteFile';
+import { DepartmentHead } from '@prisma/client';
 
-const registerIntoDB = async (payload: AdminUser) => {
+const createDepartmentHeadIntoDB = async (payload: DepartmentHead) => {
   const hashedPassword = await bcrypt.hash(payload.password as string, 10);
 
-  const response = await prisma.adminUser.create({
+  const response = await prisma.departmentHead.create({
     data: { ...payload, password: hashedPassword },
   });
 
@@ -21,7 +21,7 @@ const registerIntoDB = async (payload: AdminUser) => {
 };
 
 const loginIntoDB = async (payload: TLogin) => {
-  const existingAdmin = await prisma.adminUser.findFirst({
+  const existingAdmin = await prisma.departmentHead.findFirst({
     where: {
       email: payload.email,
     },
@@ -32,10 +32,6 @@ const loginIntoDB = async (payload: TLogin) => {
 
   if (!existingAdmin) {
     throw new AppError(404, 'Admin user not found with this email');
-  }
-
-  if (existingAdmin.status === AdminUserStatus.INACTIVE) {
-    throw new AppError(403, 'Admin user is inactive. Please contact support.');
   }
 
   const isPasswordMatch = await bcrypt.compare(
@@ -50,9 +46,8 @@ const loginIntoDB = async (payload: TLogin) => {
   const jwtPayload = {
     id: existingAdmin.id,
     email: existingAdmin.email,
-    fullName: existingAdmin.fullName,
+    name: existingAdmin.name,
     role: existingAdmin.role.name,
-    status: existingAdmin.status,
     profilePhoto: existingAdmin.profilePhoto,
   };
 
@@ -75,7 +70,7 @@ const loginIntoDB = async (payload: TLogin) => {
 };
 
 const forgetPasswordIntoDB = async (payload: { email: string }) => {
-  const userExists = await prisma.adminUser.findUniqueOrThrow({
+  const userExists = await prisma.departmentHead.findUniqueOrThrow({
     where: {
       email: payload.email,
     },
@@ -91,8 +86,7 @@ const forgetPasswordIntoDB = async (payload: { email: string }) => {
   const jwtPayload = {
     id: userExists.id,
     email: userExists.email,
-    fullName: userExists.fullName,
-    status: userExists.status,
+    name: userExists.name,
     role: userExists.role.name,
   };
 
@@ -114,14 +108,14 @@ const resetPasswordIntoDB = async (
   password: string,
   token: string,
 ) => {
-  const findUser = await prisma.adminUser.findUnique({
+  const findUser = await prisma.departmentHead.findUnique({
     where: {
       id,
     },
   });
 
   if (!findUser) {
-    throw new AppError(404, 'User not found');
+    throw new AppError(404, 'Department Head not found');
   }
 
   if (!token) {
@@ -139,7 +133,7 @@ const resetPasswordIntoDB = async (
 
   const hashedPassword = await bcrypt.hash(password as string, 10);
 
-  await prisma.adminUser.update({
+  await prisma.departmentHead.update({
     where: {
       id,
     },
@@ -156,14 +150,14 @@ const changePasswordIntoDB = async (
   newPassword: string,
   currentPassword: string,
 ) => {
-  const existingAdmin = await prisma.adminUser.findUnique({
+  const existingAdmin = await prisma.departmentHead.findUnique({
     where: {
       id: loggedUser.id,
     },
   });
 
   if (!existingAdmin) {
-    throw new AppError(404, 'Admin user not found');
+    throw new AppError(404, 'Department Head not found');
   }
 
   const isPasswordMatch = await bcrypt.compare(
@@ -177,7 +171,7 @@ const changePasswordIntoDB = async (
 
   const hashedPassword = await bcrypt.hash(newPassword as string, 10);
 
-  const response = await prisma.adminUser.update({
+  const response = await prisma.departmentHead.update({
     where: {
       id: loggedUser.id,
     },
@@ -197,9 +191,8 @@ const refreshAccessTokenIntoDB = async (refreshToken: string) => {
 
   const jwtPayload = {
     email: decoded.email,
-    fullName: decoded.fullName,
+    name: decoded.name,
     role: decoded.role,
-    status: decoded.status,
     id: decoded.id,
   };
 
@@ -212,8 +205,8 @@ const refreshAccessTokenIntoDB = async (refreshToken: string) => {
   return newAccessToken;
 };
 
-const getLoggedAdminDetailsFromDB = async (user: JwtPayload) => {
-  const response = await prisma.adminUser.findUniqueOrThrow({
+const getLoggedDepartmentHeadDetailsFromDB = async (user: JwtPayload) => {
+  const response = await prisma.departmentHead.findUniqueOrThrow({
     where: {
       id: user.id,
     },
@@ -233,21 +226,21 @@ const getLoggedAdminDetailsFromDB = async (user: JwtPayload) => {
   return response;
 };
 
-const updateAdminProfileIntoDB = async (
+const updateDepartmentHeadProfileIntoDB = async (
   loggedU: JwtPayload,
-  payload: Partial<AdminUser>,
+  payload: Partial<DepartmentHead>,
 ) => {
-  const existingAdmin = await prisma.adminUser.findUnique({
+  const existingAdmin = await prisma.departmentHead.findUnique({
     where: {
       id: loggedU.id,
     },
   });
 
   if (!existingAdmin) {
-    throw new AppError(404, 'Admin user not found');
+    throw new AppError(404, 'Department Head not found');
   }
 
-  const response = await prisma.adminUser.update({
+  const response = await prisma.departmentHead.update({
     where: {
       id: loggedU.id,
     },
@@ -257,9 +250,9 @@ const updateAdminProfileIntoDB = async (
   return response;
 };
 
-const getAdminUsersFromDB = async (query: Record<string, any>) => {
+const getDepartmentHeadsFromDB = async (query: Record<string, any>) => {
   const usersQuery = builderQuery({
-    searchFields: ['fullName', 'email'],
+    searchFields: ['name', 'email'],
     searchTerm: query.searchTerm,
     orderBy: query.orderBy ? JSON.parse(query.orderBy) : {},
     filter: query.filter ? JSON.parse(query.filter) : {},
@@ -268,7 +261,7 @@ const getAdminUsersFromDB = async (query: Record<string, any>) => {
   });
 
   const [users, totalCount] = await prisma.$transaction([
-    prisma.adminUser.findMany({
+    prisma.departmentHead.findMany({
       where: usersQuery.where,
       include: {
         role: {
@@ -278,7 +271,7 @@ const getAdminUsersFromDB = async (query: Record<string, any>) => {
         },
       },
     }),
-    prisma.adminUser.count({
+    prisma.departmentHead.count({
       where: usersQuery.where,
     }),
   ]);
@@ -293,62 +286,39 @@ const getAdminUsersFromDB = async (query: Record<string, any>) => {
   };
 };
 
-const changeAdminUserStatusIntoDB = async (id: string) => {
-  const existingAdminUser = await prisma.adminUser.findUnique({
+const deleteDepartmentHeadFromDB = async (loggedUser: JwtPayload, id: string) => {
+  const existingDepartmentHead = await prisma.departmentHead.findUnique({
     where: { id },
   });
 
-  if (!existingAdminUser) {
-    throw new AppError(404, 'Admin user not found');
-  }
-
-  const response = await prisma.adminUser.update({
-    where: { id },
-    data: {
-      status:
-        existingAdminUser.status === AdminUserStatus.ACTIVE
-          ? AdminUserStatus.INACTIVE
-          : AdminUserStatus.ACTIVE,
-    },
-  });
-
-  return response;
-};
-
-const deleteAdminUserFromDB = async (loggedUser: JwtPayload, id: string) => {
-  const existingAdminUser = await prisma.adminUser.findUnique({
-    where: { id },
-  });
-
-  if (existingAdminUser?.id === loggedUser.id) {
+  if (existingDepartmentHead?.id === loggedUser.id) {
     throw new AppError(403, 'You cannot delete your own account');
   }
 
-  if (!existingAdminUser) {
-    throw new AppError(404, 'Admin user not found');
+  if (!existingDepartmentHead) {
+    throw new AppError(404, 'Department Head not found');
   }
 
-  const response = await prisma.adminUser.delete({
+  const response = await prisma.departmentHead.delete({
     where: { id },
   });
 
-  if (existingAdminUser.profilePhoto) {
-    deleteImageFile(existingAdminUser.profilePhoto);
+  if (existingDepartmentHead.profilePhoto) {
+    deleteImageFile(existingDepartmentHead.profilePhoto);
   }
 
   return response;
 };
 
 export const AuthServices = {
-  registerIntoDB,
+  createDepartmentHeadIntoDB,
   loginIntoDB,
   forgetPasswordIntoDB,
   resetPasswordIntoDB,
   changePasswordIntoDB,
   refreshAccessTokenIntoDB,
-  getLoggedAdminDetailsFromDB,
-  updateAdminProfileIntoDB,
-  getAdminUsersFromDB,
-  changeAdminUserStatusIntoDB,
-  deleteAdminUserFromDB,
+  getLoggedDepartmentHeadDetailsFromDB,
+  updateDepartmentHeadProfileIntoDB,
+  getDepartmentHeadsFromDB,
+  deleteDepartmentHeadFromDB,
 };

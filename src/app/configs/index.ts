@@ -8,6 +8,7 @@ dotenv.config({
 export default {
   port: process.env.PORT,
   password: process.env.DEFAULT_PASS,
+  phone: process.env.DEFAULT_PHONE,
   jwtAccessSecret: process.env.JWT_ACCESS_SECRET,
   jwtRefreshSecret: process.env.JWT_REFRESH_SECRET,
   jwtAccessExpiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRES,

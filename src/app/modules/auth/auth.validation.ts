@@ -13,10 +13,12 @@ const loginValidation = z.object({
 
 const registerValidation = z.object({
   body: z.object({
-    fullName: z.string({ required_error: 'Full name is required' }),
+    name: z.string({ required_error: 'Name is required' }),
     email: z
       .string({ required_error: 'Email is required' })
       .email('Invalid email format'),
+    phone: z.string({ required_error: 'Phone number is required' }),
+    designation: z.string({ required_error: 'Designation is required' }),
     password: z
       .string({
         required_error: 'Password is required',

@@ -20,7 +20,7 @@ const login = catchAsync(async (req, res) => {
   });
 });
 
-const register = catchAsync(async (req, res) => {
+const createDepartmentHead = catchAsync(async (req, res) => {
   const profilePhotoUrl = req.file
     ? getSingleImageUrl(req, req.file)
     : undefined;
@@ -28,7 +28,7 @@ const register = catchAsync(async (req, res) => {
   if (profilePhotoUrl) {
     req.body.profilePhoto = profilePhotoUrl;
   }
-  const response = await AuthServices.registerIntoDB(req.body);
+  const response = await AuthServices.createDepartmentHeadIntoDB(req.body);
 
   sendResponse(res, {
     statusCode: 201,
@@ -88,8 +88,10 @@ const refreshAccessToken = catchAsync(async (req, res) => {
   });
 });
 
-const getLoggedAdminDetails = catchAsync(async (req, res) => {
-  const response = await AuthServices.getLoggedAdminDetailsFromDB(req.user);
+const getLoggedDepartmentHeadDetails = catchAsync(async (req, res) => {
+  const response = await AuthServices.getLoggedDepartmentHeadDetailsFromDB(
+    req.user,
+  );
 
   sendResponse(res, {
     statusCode: 200,
@@ -99,7 +101,7 @@ const getLoggedAdminDetails = catchAsync(async (req, res) => {
   });
 });
 
-const updateProfile = catchAsync(async (req, res) => {
+const updateDepartmentHeadProfile = catchAsync(async (req, res) => {
   const profilePhotoUrl = req.file
     ? getSingleImageUrl(req, req.file)
     : undefined;
@@ -108,7 +110,7 @@ const updateProfile = catchAsync(async (req, res) => {
     req.body.profilePhoto = profilePhotoUrl;
   }
 
-  const response = await AuthServices.updateAdminProfileIntoDB(
+  const response = await AuthServices.updateDepartmentHeadProfileIntoDB(
     req.user,
     req.body,
   );
@@ -121,33 +123,20 @@ const updateProfile = catchAsync(async (req, res) => {
   });
 });
 
-const getAdminUsers = catchAsync(async (req, res) => {
-  const response = await AuthServices.getAdminUsersFromDB(req.query);
+const getDepartmentHeads = catchAsync(async (req, res) => {
+  const response = await AuthServices.getDepartmentHeadsFromDB(req.query);
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'Admin users fetched successfully',
+    message: 'Department Heads fetched successfully',
     meta: response.meta,
     data: response.data,
   });
 });
 
-const changeAdminUserStatus = catchAsync(async (req, res) => {
-  const response = await AuthServices.changeAdminUserStatusIntoDB(
-    req.params.id,
-  );
-
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: 'Admin user status changed successfully',
-    data: response,
-  });
-});
-
-const deleteAdminUser = catchAsync(async (req, res) => {
-  const response = await AuthServices.deleteAdminUserFromDB(
+const deleteDepartmentHead = catchAsync(async (req, res) => {
+  const response = await AuthServices.deleteDepartmentHeadFromDB(
     req.user,
     req.params.id,
   );
@@ -162,14 +151,13 @@ const deleteAdminUser = catchAsync(async (req, res) => {
 
 export const AuthController = {
   login,
-  register,
+  createDepartmentHead,
   forgetPassword,
   resetPassword,
   changePassword,
   refreshAccessToken,
-  getLoggedAdminDetails,
-  updateProfile,
-  getAdminUsers,
-  changeAdminUserStatus,
-  deleteAdminUser,
+  getLoggedDepartmentHeadDetails,
+  updateDepartmentHeadProfile,
+  getDepartmentHeads,
+  deleteDepartmentHead,
 };
