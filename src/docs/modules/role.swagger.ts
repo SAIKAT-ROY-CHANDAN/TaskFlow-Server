@@ -1,19 +1,16 @@
-import { Router } from 'express';
-import auth from '../../middlewares/authorization';
-import { featureNames } from '../../constant/seedRoleData';
-import validation from '../../middlewares/validation';
-import { RoleValidation } from './role.validation';
-import { RoleController } from './role.controller';
-
-const router = Router();
+/**
+ * @swagger
+ * tags:
+ *   name: Roles
+ *   description: Role management endpoints
+ */
 
 /**
  * @swagger
- * /role:
+ * /roles:
  *   post:
- *     summary: Create new role
- *     description: Create a new role with permissions
- *     tags: [Role Management]
+ *     summary: Create a new role
+ *     tags: [Roles]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -21,22 +18,7 @@ const router = Router();
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - name
- *               - features
- *             properties:
- *               name:
- *                 type: string
- *                 example: "Manager"
- *               description:
- *                 type: string
- *                 example: "Manager role with specific permissions"
- *               features:
- *                 type: array
- *                 items:
- *                   type: string
- *                 example: ["profile", "settings"]
+ *             $ref: '#/components/schemas/CreateRoleRequest'
  *     responses:
  *       201:
  *         description: Role created successfully
@@ -52,7 +34,7 @@ const router = Router();
  *                   type: string
  *                   example: "Role created successfully"
  *                 data:
- *                   type: object
+ *                   $ref: '#/components/schemas/Role'
  *       400:
  *         description: Validation error
  *         content:
@@ -65,40 +47,42 @@ const router = Router();
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
- */
-router.post(
-  '/',
-  auth([featureNames.profile]),
-  validation(RoleValidation.createRoleValidation),
-  RoleController.createRole,
-);
-
-/**
- * @swagger
- * /role:
+ *       409:
+ *         description: Role already exists
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *   get:
  *     summary: Get all roles
- *     description: Retrieve list of all roles
- *     tags: [Role Management]
+ *     tags: [Roles]
+ *     security: []
  *     parameters:
  *       - in: query
  *         name: page
  *         schema:
- *           type: number
- *           example: 1
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
  *         description: Page number for pagination
  *       - in: query
  *         name: limit
  *         schema:
- *           type: number
- *           example: 10
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 10
  *         description: Number of items per page
  *       - in: query
  *         name: search
  *         schema:
  *           type: string
- *           example: "manager"
- *         description: Search term for role name
+ *         description: Search term for filtering roles
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           $ref: '#/components/schemas/RoleStatus'
+ *         description: Filter by role status
  *     responses:
  *       200:
  *         description: Roles retrieved successfully
@@ -116,19 +100,30 @@ router.post(
  *                 data:
  *                   type: array
  *                   items:
- *                     type: object
+ *                     $ref: '#/components/schemas/Role'
  *                 meta:
- *                   $ref: '#/components/schemas/PaginationMeta'
+ *                   type: object
+ *                   properties:
+ *                     page:
+ *                       type: number
+ *                       example: 1
+ *                     limit:
+ *                       type: number
+ *                       example: 10
+ *                     total:
+ *                       type: number
+ *                       example: 100
+ *                     totalPages:
+ *                       type: number
+ *                       example: 10
  */
-router.get('/', RoleController.getRoles);
 
 /**
  * @swagger
- * /role/{id}:
+ * /roles/{id}:
  *   get:
  *     summary: Get role by ID
- *     description: Retrieve a specific role by its ID
- *     tags: [Role Management]
+ *     tags: [Roles]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -137,7 +132,9 @@ router.get('/', RoleController.getRoles);
  *         required: true
  *         schema:
  *           type: string
+ *           format: uuid
  *         description: Role ID
+ *         example: "123e4567-e89b-12d3-a456-426614174000"
  *     responses:
  *       200:
  *         description: Role retrieved successfully
@@ -153,7 +150,7 @@ router.get('/', RoleController.getRoles);
  *                   type: string
  *                   example: "Role retrieved successfully"
  *                 data:
- *                   type: object
+ *                   $ref: '#/components/schemas/Role'
  *       401:
  *         description: Unauthorized
  *         content:
@@ -166,16 +163,9 @@ router.get('/', RoleController.getRoles);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
- */
-router.get('/:id', auth([featureNames.profile]), RoleController.getRoleById);
-
-/**
- * @swagger
- * /role/{id}:
  *   put:
- *     summary: Update role
- *     description: Update an existing role
- *     tags: [Role Management]
+ *     summary: Update role by ID
+ *     tags: [Roles]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -184,25 +174,15 @@ router.get('/:id', auth([featureNames.profile]), RoleController.getRoleById);
  *         required: true
  *         schema:
  *           type: string
+ *           format: uuid
  *         description: Role ID
+ *         example: "123e4567-e89b-12d3-a456-426614174000"
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 example: "Updated Manager"
- *               description:
- *                 type: string
- *                 example: "Updated manager role description"
- *               features:
- *                 type: array
- *                 items:
- *                   type: string
- *                 example: ["profile", "settings", "reports"]
+ *             $ref: '#/components/schemas/UpdateRoleRequest'
  *     responses:
  *       200:
  *         description: Role updated successfully
@@ -218,7 +198,7 @@ router.get('/:id', auth([featureNames.profile]), RoleController.getRoleById);
  *                   type: string
  *                   example: "Role updated successfully"
  *                 data:
- *                   type: object
+ *                   $ref: '#/components/schemas/Role'
  *       400:
  *         description: Validation error
  *         content:
@@ -237,21 +217,9 @@ router.get('/:id', auth([featureNames.profile]), RoleController.getRoleById);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
- */
-router.put(
-  '/:id',
-  auth([featureNames.profile]),
-  validation(RoleValidation.updateRoleValidation),
-  RoleController.updateRole,
-);
-
-/**
- * @swagger
- * /role/{id}:
  *   delete:
- *     summary: Delete role
- *     description: Delete a role by ID
- *     tags: [Role Management]
+ *     summary: Delete role by ID
+ *     tags: [Roles]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -260,7 +228,9 @@ router.put(
  *         required: true
  *         schema:
  *           type: string
+ *           format: uuid
  *         description: Role ID
+ *         example: "123e4567-e89b-12d3-a456-426614174000"
  *     responses:
  *       200:
  *         description: Role deleted successfully
@@ -287,7 +257,10 @@ router.put(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *       409:
+ *         description: Role cannot be deleted (in use)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
-router.delete('/:id', auth([featureNames.profile]), RoleController.deleteRole);
-
-export const RoleRoutes = router;
