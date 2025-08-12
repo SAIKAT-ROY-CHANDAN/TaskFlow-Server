@@ -206,8 +206,6 @@ const refreshAccessTokenIntoDB = async (refreshToken: string) => {
 };
 
 const getLoggedDepartmentHeadDetailsFromDB = async (user: JwtPayload) => {
-  console.log("user", user);
-  console.log("hello case 1")
   const response = await prisma.departmentHead.findUniqueOrThrow({
     where: {
       id: user.id,
