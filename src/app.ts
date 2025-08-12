@@ -6,6 +6,8 @@ import { globalErrorHandler } from './app/middlewares/globalErrorHandler';
 import notFoundErrorHandler from './app/middlewares/notFoundErrorHandler';
 import { seedRoleAdmin } from './app/utils/seedDepartmentHead';
 import cookieParser from 'cookie-parser';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './app/configs/swagger.config';
 
 // Initialize the express application
 const app: Application = express();
@@ -38,6 +40,25 @@ app.get('/', (req, res) => {
     success: true,
     message: 'Welcome to the Backend in Nessa Foundation!',
   });
+});
+
+// Swagger documentation setup
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'MNTech Foundation API Documentation',
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  }),
+);
+
+// JSON endpoint for swagger specification
+app.get('/api-docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
 });
 
 // Importing routes

@@ -1,77 +1,54 @@
-import { Router } from 'express';
-import validation from '../../middlewares/validation';
-import { authValidations } from './auth.validation';
-import { AuthController } from './auth.controller';
-import auth from '../../middlewares/authorization';
-import { featureNames } from '../../constant/seedRoleData';
-import { imageUpload, uploadImages } from '../../middlewares/multer';
-
-const router = Router();
+/**
+ * @swagger
+ * tags:
+ *   name: Authentication
+ *   description: Authentication and authorization endpoints
+ */
 
 /**
  * @swagger
  * /auth/login:
  *   post:
  *     summary: User login
- *     description: Authenticate user with email and password
  *     tags: [Authentication]
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 format: email
- *                 example: "admin@example.com"
- *               password:
- *                 type: string
- *                 example: "password123"
+ *             $ref: '#/components/schemas/LoginRequest'
  *     responses:
  *       200:
  *         description: Login successful
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: "Login successful"
- *                 data:
- *                   type: object
- *                   properties:
- *                     accessToken:
- *                       type: string
- *                     user:
- *                       type: object
+ *               $ref: '#/components/schemas/LoginResponse'
+ *         headers:
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *               example: refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; HttpOnly; Secure; SameSite=Strict
  *       400:
  *         description: Invalid credentials
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
-router.post(
-  '/login',
-  validation(authValidations.loginValidation),
-  AuthController.login,
-);
 
 /**
  * @swagger
  * /auth/register:
  *   post:
- *     summary: Register new department head
- *     description: Create a new department head account
+ *     summary: Register a new department head
  *     tags: [Authentication]
  *     security:
  *       - bearerAuth: []
@@ -84,8 +61,9 @@ router.post(
  *             required:
  *               - name
  *               - email
+ *               - phone
  *               - password
- *               - departmentId
+ *               - roleId
  *             properties:
  *               name:
  *                 type: string
@@ -93,20 +71,25 @@ router.post(
  *               email:
  *                 type: string
  *                 format: email
- *                 example: "john@example.com"
+ *                 example: "john.doe@example.com"
+ *               phone:
+ *                 type: string
+ *                 example: "+1234567890"
  *               password:
  *                 type: string
+ *                 format: password
  *                 example: "password123"
- *               departmentId:
+ *               roleId:
  *                 type: string
- *                 example: "dept123"
+ *                 format: uuid
+ *                 example: "123e4567-e89b-12d3-a456-426614174000"
  *               profilePhoto:
  *                 type: string
  *                 format: binary
- *                 description: Profile photo file
+ *                 description: "Profile photo file upload"
  *     responses:
  *       201:
- *         description: Department head created successfully
+ *         description: Department head registered successfully
  *         content:
  *           application/json:
  *             schema:
@@ -117,36 +100,30 @@ router.post(
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: "Department head created successfully"
+ *                   example: "Department head registered successfully"
+ *                 data:
+ *                   $ref: '#/components/schemas/DepartmentHead'
  *       400:
  *         description: Validation error
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
- *       401:
- *         description: Unauthorized
+ *       409:
+ *         description: User already exists
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post(
-  '/register',
-  auth([featureNames.profile]),
-  imageUpload.single('profilePhoto'),
-  uploadImages,
-  validation(authValidations.registerValidation),
-  AuthController.createDepartmentHead,
-);
 
 /**
  * @swagger
  * /auth/forget-password:
  *   post:
  *     summary: Request password reset
- *     description: Send password reset email to user
  *     tags: [Authentication]
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
@@ -166,14 +143,7 @@ router.post(
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: "Password reset email sent"
+ *               $ref: '#/components/schemas/SuccessResponse'
  *       404:
  *         description: User not found
  *         content:
@@ -181,15 +151,14 @@ router.post(
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/forget-password', AuthController.forgetPassword);
 
 /**
  * @swagger
  * /auth/reset-password:
  *   post:
- *     summary: Reset password
- *     description: Reset user password with token
+ *     summary: Reset password with token
  *     tags: [Authentication]
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
@@ -198,13 +167,14 @@ router.post('/forget-password', AuthController.forgetPassword);
  *             type: object
  *             required:
  *               - token
- *               - password
+ *               - newPassword
  *             properties:
  *               token:
  *                 type: string
- *                 example: "reset_token_here"
- *               password:
+ *                 example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *               newPassword:
  *                 type: string
+ *                 format: password
  *                 example: "newpassword123"
  *     responses:
  *       200:
@@ -212,14 +182,7 @@ router.post('/forget-password', AuthController.forgetPassword);
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: "Password reset successful"
+ *               $ref: '#/components/schemas/SuccessResponse'
  *       400:
  *         description: Invalid or expired token
  *         content:
@@ -227,14 +190,12 @@ router.post('/forget-password', AuthController.forgetPassword);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/reset-password', AuthController.resetPassword);
 
 /**
  * @swagger
  * /auth/change-password:
  *   post:
- *     summary: Change password
- *     description: Change user password (requires authentication)
+ *     summary: Change password for authenticated user
  *     tags: [Authentication]
  *     security:
  *       - bearerAuth: []
@@ -243,33 +204,16 @@ router.post('/reset-password', AuthController.resetPassword);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - currentPassword
- *               - newPassword
- *             properties:
- *               currentPassword:
- *                 type: string
- *                 example: "oldpassword123"
- *               newPassword:
- *                 type: string
- *                 example: "newpassword123"
+ *             $ref: '#/components/schemas/ChangePasswordRequest'
  *     responses:
  *       200:
  *         description: Password changed successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: "Password changed successfully"
+ *               $ref: '#/components/schemas/SuccessResponse'
  *       400:
- *         description: Invalid current password
+ *         description: Current password incorrect
  *         content:
  *           application/json:
  *             schema:
@@ -281,19 +225,12 @@ router.post('/reset-password', AuthController.resetPassword);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post(
-  '/change-password',
-  auth([featureNames.settings]),
-  validation(authValidations.changePasswordValidation),
-  AuthController.changePassword,
-);
 
 /**
  * @swagger
  * /auth/refresh-token:
  *   post:
  *     summary: Refresh access token
- *     description: Get new access token using refresh token
  *     tags: [Authentication]
  *     security:
  *       - cookieAuth: []
@@ -316,6 +253,7 @@ router.post(
  *                   properties:
  *                     accessToken:
  *                       type: string
+ *                       example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  *       401:
  *         description: Invalid refresh token
  *         content:
@@ -323,61 +261,49 @@ router.post(
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/refresh-token', AuthController.refreshAccessToken);
 
 /**
  * @swagger
  * /auth/department-heads:
  *   get:
  *     summary: Get all department heads
- *     description: Retrieve list of all department heads
  *     tags: [Authentication]
+ *     security: []
  *     parameters:
  *       - in: query
  *         name: page
  *         schema:
- *           type: number
- *           example: 1
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
  *         description: Page number for pagination
  *       - in: query
  *         name: limit
  *         schema:
- *           type: number
- *           example: 10
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 10
  *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search term for filtering department heads
  *     responses:
  *       200:
  *         description: Department heads retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: "Department heads retrieved successfully"
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                 meta:
- *                   $ref: '#/components/schemas/PaginationMeta'
+ *               $ref: '#/components/schemas/PaginatedResponse'
  */
-router.get(
-  '/department-heads',
-  // auth([featureNames.profile]),
-  AuthController.getDepartmentHeads,
-);
 
 /**
  * @swagger
  * /auth/me:
  *   get:
- *     summary: Get logged user details
- *     description: Get details of currently logged in user
+ *     summary: Get logged in user details
  *     tags: [Authentication]
  *     security:
  *       - bearerAuth: []
@@ -396,7 +322,7 @@ router.get(
  *                   type: string
  *                   example: "User details retrieved successfully"
  *                 data:
- *                   type: object
+ *                   $ref: '#/components/schemas/DepartmentHead'
  *       401:
  *         description: Unauthorized
  *         content:
@@ -404,14 +330,12 @@ router.get(
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/me', auth([]), AuthController.getLoggedDepartmentHeadDetails);
 
 /**
  * @swagger
  * /auth/update-profile:
  *   put:
  *     summary: Update user profile
- *     description: Update logged user profile information
  *     tags: [Authentication]
  *     security:
  *       - bearerAuth: []
@@ -424,15 +348,14 @@ router.get('/me', auth([]), AuthController.getLoggedDepartmentHeadDetails);
  *             properties:
  *               name:
  *                 type: string
- *                 example: "Updated Name"
- *               email:
+ *                 example: "John Doe Updated"
+ *               phone:
  *                 type: string
- *                 format: email
- *                 example: "updated@example.com"
+ *                 example: "+1234567890"
  *               profilePhoto:
  *                 type: string
  *                 format: binary
- *                 description: New profile photo
+ *                 description: "New profile photo file upload"
  *     responses:
  *       200:
  *         description: Profile updated successfully
@@ -448,7 +371,13 @@ router.get('/me', auth([]), AuthController.getLoggedDepartmentHeadDetails);
  *                   type: string
  *                   example: "Profile updated successfully"
  *                 data:
- *                   type: object
+ *                   $ref: '#/components/schemas/DepartmentHead'
+ *       400:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       401:
  *         description: Unauthorized
  *         content:
@@ -456,61 +385,3 @@ router.get('/me', auth([]), AuthController.getLoggedDepartmentHeadDetails);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put(
-  '/update-profile',
-  auth([featureNames.profile]),
-  imageUpload.single('profilePhoto'),
-  uploadImages,
-  AuthController.updateDepartmentHeadProfile,
-);
-
-/**
- * @swagger
- * /auth/department-heads/{id}:
- *   delete:
- *     summary: Delete department head
- *     description: Delete a department head by ID
- *     tags: [Authentication]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Department head ID
- *     responses:
- *       200:
- *         description: Department head deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: "Department head deleted successfully"
- *       401:
- *         description: Unauthorized
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       404:
- *         description: Department head not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- */
-router.delete(
-  '/department-heads/:id',
-  auth([featureNames.profile]),
-  AuthController.deleteDepartmentHead,
-);
-
-export const AuthRoutes = router;
