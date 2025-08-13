@@ -7,6 +7,7 @@ import { BlogRoutes } from '../modules/blog/blog.routes';
 import { SubscriberRoutes } from '../modules/subscriber/subscriber.routes';
 import { ContactRoutes } from '../modules/contact/contact.routes';
 import { AdminContactRoutes } from '../modules/admin-contact/admin-contact.routes';
+import { ProjectRoutes } from '../modules/project/project.routes';
 
 const router = Router();
 
@@ -39,6 +40,10 @@ const moduleRoutes: TModuleRoute[] = [
     path: '/admin-contacts',
     route: AdminContactRoutes,
   },
+  {
+    path: "/projects",
+    route: ProjectRoutes,
+  }
 ];
 
 moduleRoutes.forEach((route) => {
