@@ -2,6 +2,12 @@ import { Router } from 'express';
 import { TModuleRoute } from '../types/moduleRoute.type';
 import { AuthRoutes } from '../modules/auth/auth.routes';
 import { RoleRoutes } from '../modules/role/role.routes';
+import { CategoryRoutes } from '../modules/category/category.routes';
+import { BlogRoutes } from '../modules/blog/blog.routes';
+import { SubscriberRoutes } from '../modules/subscriber/subscriber.routes';
+import { ContactRoutes } from '../modules/contact/contact.routes';
+import { AdminContactRoutes } from '../modules/admin-contact/admin-contact.routes';
+import { ProjectRoutes } from '../modules/project/project.routes';
 
 const router = Router();
 
@@ -14,6 +20,30 @@ const moduleRoutes: TModuleRoute[] = [
     path: '/roles',
     route: RoleRoutes,
   },
+  {
+    path: '/categories',
+    route: CategoryRoutes,
+  },
+  {
+    path: '/blogs',
+    route: BlogRoutes,
+  },
+  {
+    path: '/subscribers',
+    route: SubscriberRoutes,
+  },
+  {
+    path: '/contacts',
+    route: ContactRoutes,
+  },
+  {
+    path: '/admin-contacts',
+    route: AdminContactRoutes,
+  },
+  {
+    path: "/projects",
+    route: ProjectRoutes,
+  }
 ];
 
 moduleRoutes.forEach((route) => {

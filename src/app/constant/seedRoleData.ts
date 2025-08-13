@@ -1,82 +1,118 @@
-import { TAdminRole } from "../types/departmentHeadRole.type";
+import { TAdminRole } from '../types/departmentHeadRole.type';
 
 export const seedRoleAdminData: TAdminRole = {
   name: 'Super Admin',
   roleFeature: [
     {
-      name: 'Overview',
+      name: 'Dashboard',
       path: 'dashboard',
       index: 1,
     },
     {
-      name: 'Donations',
-      path: 'donations',
+      name: 'Blog Post',
+      path: 'blogs',
       index: 2,
     },
     {
-      name: 'Donors',
-      path: 'donors',
+      name: 'Categories',
+      path: 'categories',
       index: 3,
     },
     {
-      name: 'Events',
-      path: 'events',
+      name: 'Subscribers',
+      path: 'subscribers',
       index: 4,
-    },
-    {
-      name: 'Campaigns',
-      path: 'campaigns',
-      index: 5,
-    },
-    {
-      name: 'Volunteer',
-      path: 'volunteer',
-      index: 6,
-    },
-    {
-      name: 'Partnership',
-      path: 'partnership',
-      index: 7,
-    },
-    {
-      name: 'Management',
-      path: 'management',
-      index: 8,
-    },
-    {
-      name: 'Blogs',
-      path: 'blogs',
-      index: 9,
     },
     {
       name: 'Contacts',
       path: 'contacts',
+      index: 5,
+    },
+    {
+      name: 'Admin Contact',
+      path: 'admin-contact',
+      index: 6,
+    },
+    {
+      name: 'Projects',
+      path: 'projects',
+      index: 7,
+    },
+    {
+      name: 'Services',
+      path: 'services',
+      index: 8,
+    },
+    {
+      name: 'Managements',
+      path: 'managements',
+      index: 9,
+    },
+    {
+      name: 'Testimonials',
+      path: 'testimonials',
       index: 10,
     },
     {
-      name: 'Profile',
-      path: 'profile',
+      name: 'Clients',
+      path: 'clients',
       index: 11,
     },
     {
-      name: 'Settings',
-      path: 'settings',
+      name: 'FAQ`s',
+      path: 'faqs',
       index: 12,
+    },
+    {
+      name: 'Other Page Setup',
+      path: 'other-page-setup',
+      index: 13,
+    },
+    {
+      name: 'Job Management',
+      path: 'job-management',
+      index: 14,
+    },
+    {
+      name: 'specialized industry',
+      path: 'specialized-industry',
+      index: 15,
+    },
+    {
+      name: 'Invoice',
+      path: 'invoice',
+      index: 16,
+    },
+    {
+      name: 'Role Management',
+      path: 'role-management',
+      index: 17,
+    },
+    {
+      name: 'Profile Details',
+      path: 'profile-details',
+      index: 18,
     },
   ],
 };
 
 export const featureNames = {
-  dashboard: 'Overview',
-  donations: 'Donations',
-  donors: 'Donors',
-  events: 'Events',
-  campaigns: 'Campaigns',
-  volunteer: 'Volunteer',
-  partnership: 'Partnership',
-  management: 'Management',
-  blogs: 'Blogs',
+  dashboard: 'Dashboard',
+  blogs: 'Blog Post',
+  categories: 'Categories',
+  subscribers: 'Subscribers',
   contacts: 'Contacts',
-  profile: 'Profile',
-  settings: 'Settings',
+  adminContact: 'Admin Contact',
+  projects: 'Projects',
+  services: 'Services',
+  managements: 'Managements',
+  testimonials: 'Testimonials',
+  clients: 'Clients',
+  faqs: 'FAQ`s',
+  otherPageSetup: 'Other Page Setup',
+  jobManagement: 'Job Management',
+  specializedIndustry: 'Specialized Industry',
+  invoice: 'Invoice',
+  roleManagement: 'Role Management',
+  profileDetails: 'Profile Details',
 };
