@@ -43,6 +43,7 @@ const getBlogsFromDB = async (query: Record<string, any>) => {
     ...blogQuery,
     include: {
       tags: true,
+      categories: true,
     },
   });
 
@@ -61,6 +62,7 @@ const getBlogFromDB = async (id: string) => {
     where: { id },
     include: {
       tags: true,
+      categories: true,
     },
   });
 

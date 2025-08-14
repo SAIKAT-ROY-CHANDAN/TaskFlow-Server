@@ -119,7 +119,7 @@ router.post(
  *         name: filter
  *         schema:
  *           type: string
- *         description: JSON string for filtering (e.g., {"isOpened": false})
+ *         description: "JSON string for filtering (e.g., {\"isOpened\": false})"
  *         example: '{"isOpened": false}'
  *     responses:
  *       200:
@@ -383,7 +383,7 @@ router.delete(
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.patch(
+router.put(
   '/:id/mark-opened',
   auth([featureNames.contacts]),
   ContactController.markContactAsOpened,
