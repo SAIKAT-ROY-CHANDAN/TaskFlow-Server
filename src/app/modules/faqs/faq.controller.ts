@@ -1,5 +1,4 @@
 import catchAsync from '../../utils/catchAsync';
-import { getSingleImageUrl } from '../../utils/getImageUrl';
 import sendResponse from '../../utils/sendResponse';
 import { FaqsServices } from './faq.service';
 
@@ -41,12 +40,8 @@ const getSingleFaqs = catchAsync(async (req, res) => {
 });
 
 const updateFaqs = catchAsync(async (req, res) => {
-  const thumbnailUrl = req.file ? getSingleImageUrl(req, req.file) : null;
-
   const response = await FaqsServices.updateFaqsIntoDB(req.params.id, {
     ...req.body,
-    thumbnail: thumbnailUrl,
-    tags: JSON.parse(req.body.tags || '[]'),
   });
 
   sendResponse(res, {
