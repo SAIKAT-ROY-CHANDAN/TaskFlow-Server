@@ -1,5 +1,6 @@
 import { Category } from '@prisma/client';
 import prisma from '../../../db/db.config';
+import { builderQuery } from '../../builders/prismaBuilderQuery';
 
 const createCategoryIntoDB = async (payload: Category) => {
   const response = await prisma.category.create({
@@ -9,10 +10,39 @@ const createCategoryIntoDB = async (payload: Category) => {
   return response;
 };
 
-const getCategoriesFromDB = async () => {
-  const response = await prisma.category.findMany();
+const getCategoriesFromDB = async (query: Record<string, any>) => {
+  const categoryQuery = builderQuery({
+    searchFields: ['name'],
+    searchTerm: query.searchTerm,
+    filter: query.filter ? JSON.parse(query.filter) : {},
+    orderBy: query.orderBy ? JSON.parse(query.orderBy) : {},
+    page: query.page ? Number(query.page) : 1,
+    limit: query.limit ? Number(query.limit) : 10,
+  });
 
-  return response;
+  const totalCategories = await prisma.category.count({
+    where: categoryQuery.where,
+  });
+  const currentPage = Number(query.page) || 1;
+  const totalPages = Math.ceil(totalCategories / categoryQuery.take);
+
+  const response = await prisma.category.findMany({
+    ...categoryQuery,
+    include: {
+      blogs: true,
+      projects: true,
+      services: true,
+    },
+  });
+
+  return {
+    meta: {
+      totalItems: totalCategories,
+      totalPages,
+      currentPage,
+    },
+    data: response,
+  };
 };
 
 const getCategoryFromDB = async (id: string) => {
