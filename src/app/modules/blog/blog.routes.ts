@@ -190,6 +190,41 @@ router.get('/', BlogController.getBlogs);
 
 /**
  * @swagger
+ * /blogs/tags:
+ *   get:
+ *     tags:
+ *       - Blogs
+ *     summary: Get all tags
+ *     description: Retrieve a list of all tags (public endpoint - no authentication required)
+ *     responses:
+ *       200:
+ *         description: Tags retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ApiResponse'
+ *             example:
+ *               success: true
+ *               statusCode: 200
+ *               message: "Tags retrieved successfully"
+ *               data:
+ *                 - id: "tag-1"
+ *                   name: "JavaScript"
+ *                 - id: "tag-2"
+ *                   name: "React"
+ *                 - id: "tag-3"
+ *                   name: "Node.js"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+router.get('/tags', BlogController.getTags);
+
+/**
+ * @swagger
  * /blogs/{id}:
  *   get:
  *     tags:

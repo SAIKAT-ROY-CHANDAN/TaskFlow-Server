@@ -71,10 +71,22 @@ const deleteBlog = catchAsync(async (req, res) => {
   });
 });
 
+const getTags = catchAsync(async (req, res) => {
+  const response = await BlogServices.getTagsFromDB();
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Tags retrieved successfully',
+    data: response,
+  });
+});
+
 export const BlogController = {
   createBlog,
   getBlogs,
   getBlog,
+  getTags,
   updateBlog,
   deleteBlog,
 };

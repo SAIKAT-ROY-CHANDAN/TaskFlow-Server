@@ -123,10 +123,17 @@ const deleteBlogFromDB = async (id: string) => {
   return response;
 };
 
+const getTagsFromDB = async () => {
+  const response = await prisma.tag.findMany();
+
+  return response;
+};
+
 export const BlogServices = {
   createBlogIntoDB,
   getBlogsFromDB,
   getBlogFromDB,
   updateBlogIntoDB,
   deleteBlogFromDB,
+  getTagsFromDB,
 };

@@ -117,7 +117,6 @@ router.post(
  */
 router.get(
   '/',
-  auth([featureNames.categories]),
   CategoryController.getCategories,
 );
 
