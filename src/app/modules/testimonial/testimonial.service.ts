@@ -92,7 +92,7 @@ const deleteTestimonialFromDB = async (id: string) => {
     where: { id },
   });
 
-  const response = await prisma.blog.delete({
+  const response = await prisma.testimonial.delete({
     where: { id },
   });
 

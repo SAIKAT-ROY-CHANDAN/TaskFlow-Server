@@ -48,7 +48,6 @@ const updateTestimonial = catchAsync(async (req, res) => {
   const response = await TestimonialServices.updateTestimonialIntoDB(req.params.id, {
     ...req.body,
     profilePhoto: profilePhotoUrl,
-    tags: JSON.parse(req.body.tags || '[]'),
   });
 
   sendResponse(res, {
