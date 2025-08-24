@@ -10,6 +10,7 @@ import { AdminContactRoutes } from '../modules/admin-contact/admin-contact.route
 import { ProjectRoutes } from '../modules/project/project.routes';
 import { FaqsRoutes } from '../modules/faqs/faq.routes';
 import BannerRoutes from '../modules/banner/banner.routes';
+import { DepartmentHeadRoutes } from '../modules/department-head/department-head.routes';
 
 const router = Router();
 
@@ -45,6 +46,10 @@ const moduleRoutes: TModuleRoute[] = [
   {
     path: '/projects',
     route: ProjectRoutes,
+  },
+  {
+    path: '/department-heads',
+    route: DepartmentHeadRoutes,
   },
   {
     path: '/banners',
