@@ -11,6 +11,7 @@ import { ProjectRoutes } from '../modules/project/project.routes';
 import { FaqsRoutes } from '../modules/faqs/faq.routes';
 import BannerRoutes from '../modules/banner/banner.routes';
 import { DepartmentHeadRoutes } from '../modules/department-head/department-head.routes';
+import { EmployRoutes } from '../modules/employ/employ.routes';
 
 const router = Router();
 
@@ -50,6 +51,10 @@ const moduleRoutes: TModuleRoute[] = [
   {
     path: '/department-heads',
     route: DepartmentHeadRoutes,
+  },
+  {
+    path: '/employers',
+    route: EmployRoutes,
   },
   {
     path: '/banners',
