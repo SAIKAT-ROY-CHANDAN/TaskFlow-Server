@@ -12,6 +12,7 @@ import { FaqsRoutes } from '../modules/faqs/faq.routes';
 import BannerRoutes from '../modules/banner/banner.routes';
 import { TestimonialRoutes } from '../modules/testimonial/testimonial.routes';
 import { FooterRoutes } from '../modules/footer/footer.routes';
+import { TermsConditonsRoutes } from '../modules/terms-conditions/terms-condition.routes';
 
 const router = Router();
 
@@ -57,12 +58,16 @@ const moduleRoutes: TModuleRoute[] = [
     route: FaqsRoutes,
   },
   {
-    path: "/testimonials",
+    path: '/testimonials',
     route: TestimonialRoutes,
   },
   {
-    path: "/footer",
+    path: '/footer',
     route: FooterRoutes,
+  },
+  {
+    path: '/terms-and-conditions',
+    route: TermsConditonsRoutes,
   },
 ];
 
