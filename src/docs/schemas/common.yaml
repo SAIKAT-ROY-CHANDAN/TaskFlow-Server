@@ -420,3 +420,93 @@ components:
               example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
             user:
               $ref: '#/components/schemas/DepartmentHead'
+
+    # Banner Model
+    Banner:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: '64f5c8b2e4b0f2a3c4d5e6f7'
+        title:
+          type: string
+          example: 'Welcome to Our Company'
+        subTitle:
+          type: string
+          example: 'We provide amazing services'
+        description:
+          type: string
+          nullable: true
+          example: 'Detailed description of our services and offerings'
+        sideImage1:
+          type: string
+          nullable: true
+          example: 'https://example.com/side-image-1.jpg'
+        sideImage2:
+          type: string
+          nullable: true
+          example: 'https://example.com/side-image-2.jpg'
+        logo:
+          type: string
+          nullable: true
+          example: 'https://example.com/logo.jpg'
+        isDeleted:
+          type: boolean
+          example: false
+        createdAt:
+          type: string
+          format: date-time
+          example: '2024-01-15T10:30:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2024-01-15T10:30:00Z'
+
+    # Banner Response DTOs
+    BannerResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        statusCode:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: 'Banner retrieved successfully'
+        data:
+          $ref: '#/components/schemas/Banner'
+
+    BannersListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        statusCode:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: 'Banners retrieved successfully'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Banner'
+        meta:
+          type: object
+          properties:
+            page:
+              type: number
+              example: 1
+            limit:
+              type: number
+              example: 10
+            total:
+              type: number
+              example: 100
+            totalPages:
+              type: number
+              example: 10

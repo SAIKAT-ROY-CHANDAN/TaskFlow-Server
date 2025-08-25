@@ -14,13 +14,14 @@ const createCategory = catchAsync(async (req, res) => {
 });
 
 const getCategories = catchAsync(async (req, res) => {
-  const response = await CategoryServices.getCategoriesFromDB();
+  const {data, meta} = await CategoryServices.getCategoriesFromDB(req.query);
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: 'Categories retrieved successfully',
-    data: response,
+    meta,
+    data,
   });
 });
 
@@ -37,7 +38,10 @@ const getCategory = catchAsync(async (req, res) => {
 });
 
 const updateCategory = catchAsync(async (req, res) => {
-  const response = await CategoryServices.updateCategoryInDB(req.params.id, req.body);
+  const response = await CategoryServices.updateCategoryInDB(
+    req.params.id,
+    req.body,
+  );
 
   sendResponse(res, {
     statusCode: 200,

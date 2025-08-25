@@ -376,7 +376,7 @@ router.post('/refresh-token', AuthController.refreshAccessToken);
  */
 router.get(
   '/department-heads',
-  // auth([featureNames.profile]),
+  auth([featureNames.managements]),
   AuthController.getDepartmentHeads,
 );
 

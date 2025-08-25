@@ -285,7 +285,7 @@ router.get('/:id', ProjectControllers.getProject);
  *       404:
  *         description: Project not found
  */
-router.patch(
+router.put(
   '/:id',
   auth([featureNames.projects]),
   imageUpload.fields([
