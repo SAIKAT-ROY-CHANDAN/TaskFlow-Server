@@ -13,6 +13,7 @@ import BannerRoutes from '../modules/banner/banner.routes';
 import { DepartmentHeadRoutes } from '../modules/department-head/department-head.routes';
 import { EmployRoutes } from '../modules/employ/employ.routes';
 import { JobCircularRoutes } from '../modules/job-circular/job-circular.routes';
+import { JobApplicationRoutes } from '../modules/job-application/job-application.routes';
 
 const router = Router();
 
@@ -60,6 +61,10 @@ const moduleRoutes: TModuleRoute[] = [
   {
     path: '/job-circulars',
     route: JobCircularRoutes,
+  },
+  {
+    path: '/job-applications',
+    route: JobApplicationRoutes,
   },
   {
     path: '/banners',

@@ -106,7 +106,10 @@ import multer from 'multer';
 import path from 'path';
 import sharp from 'sharp';
 import { NextFunction } from 'express';
-import { ACCEPTED_FILE_TYPES, ACCEPTED_IMAGE_TYPES } from '../constant/acceptedType';
+import {
+  ACCEPTED_FILE_TYPES,
+  ACCEPTED_IMAGE_TYPES,
+} from '../constant/acceptedType';
 
 const fileStorage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -165,7 +168,6 @@ export const uploadImages = async (req: any, res: any, next: NextFunction) => {
       const outputPath = path.join(process.cwd(), 'public', 'images', filename);
 
       await sharp(file.buffer)
-        .resize(1920, 1080, { fit: 'inside', withoutEnlargement: true })
         .webp({ quality: 80 })
         .toFile(outputPath);
 
@@ -193,7 +195,7 @@ export const uploadImages = async (req: any, res: any, next: NextFunction) => {
     console.error('Image processing error:', error);
     res.status(500).json({
       success: false,
-      message: 'Error processing the images',
-    });
-  }
+      message: 'Error processing the file',
+    });
+  }
 };
