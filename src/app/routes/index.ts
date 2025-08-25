@@ -12,6 +12,7 @@ import { FaqsRoutes } from '../modules/faqs/faq.routes';
 import BannerRoutes from '../modules/banner/banner.routes';
 import { DepartmentHeadRoutes } from '../modules/department-head/department-head.routes';
 import { EmployRoutes } from '../modules/employ/employ.routes';
+import { JobCircularRoutes } from '../modules/job-circular/job-circular.routes';
 
 const router = Router();
 
@@ -55,6 +56,10 @@ const moduleRoutes: TModuleRoute[] = [
   {
     path: '/employers',
     route: EmployRoutes,
+  },
+  {
+    path: '/job-circulars',
+    route: JobCircularRoutes,
   },
   {
     path: '/banners',
