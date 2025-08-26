@@ -331,7 +331,7 @@ model JobApplication {
   githubProfile    String?
   portfolio        String?
   jobCircularId    String
-  jobCircular      JobCircular @relation(fields: [jobCircularId], references: [id])
+  jobCircular      JobCircular @relation(fields: [jobCircularId], references: [id], onDelete: Cascade)
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
 }

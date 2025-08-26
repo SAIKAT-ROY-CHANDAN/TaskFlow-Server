@@ -4,11 +4,24 @@ import sendResponse from '../../utils/sendResponse';
 import { JobApplicationServices } from './job-application.service';
 
 const createJobApplication = catchAsync(async (req, res) => {
-  const resumeUrl = req.file ? getSinglePdfUrl(req, req.file) : null;
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+  const applyData: {
+    resume?: string | null;
+    coverLetter?: string | null;
+  } = {};
+
+  if (files && files['resume'] && files['resume'][0]) {
+    applyData.resume = getSinglePdfUrl(req, files['resume'][0]);
+  }
+
+  if (files && files['coverLetter'] && files['coverLetter'][0]) {
+    applyData.coverLetter = getSinglePdfUrl(req, files['coverLetter'][0]);
+  }
 
   const response = await JobApplicationServices.createJobApplicationIntoDB({
     ...req.body,
-    resume: resumeUrl,
+    ...applyData,
   });
 
   sendResponse(res, {

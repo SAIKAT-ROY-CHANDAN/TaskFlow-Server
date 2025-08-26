@@ -1,11 +1,13 @@
-import { JobApplication, Prisma } from '@prisma/client';
+import { JobApplication } from '@prisma/client';
 import prisma from '../../../db/db.config';
 import { builderQuery } from '../../builders/prismaBuilderQuery';
 import { deleteFile } from '../../utils/deleteFile';
 
-const createJobApplicationIntoDB = async (payload: Prisma.JobApplicationCreateInput) => {
+const createJobApplicationIntoDB = async (payload: JobApplication) => {
   const response = await prisma.jobApplication.create({
-    data: payload,
+    data: {
+      ...payload,
+    },
   });
 
   return response;
