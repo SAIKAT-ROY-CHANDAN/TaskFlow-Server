@@ -14,6 +14,7 @@ import { DepartmentHeadRoutes } from '../modules/department-head/department-head
 import { EmployRoutes } from '../modules/employ/employ.routes';
 import { JobCircularRoutes } from '../modules/job-circular/job-circular.routes';
 import { JobApplicationRoutes } from '../modules/job-application/job-application.routes';
+import { ServiceRoutes } from '../modules/service/service.routes';
 
 const router = Router();
 
@@ -73,6 +74,10 @@ const moduleRoutes: TModuleRoute[] = [
   {
     path: '/faqs',
     route: FaqsRoutes,
+  },
+  {
+    path: '/services',
+    route: ServiceRoutes,
   },
 ];
 
