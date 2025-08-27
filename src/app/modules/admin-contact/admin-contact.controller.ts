@@ -16,37 +16,23 @@ const createAdminContact = catchAsync(async (req, res) => {
 });
 
 const getAdminContacts = catchAsync(async (req, res) => {
-  const { meta, data } = await AdminContactServices.getAdminContactsFromDB(
-    req.query,
-  );
+  const response = await AdminContactServices.getAdminContactsFromDB();
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
     message: 'Admin contacts retrieved successfully',
-    meta,
-    data,
-  });
-});
-
-const getAdminContact = catchAsync(async (req, res) => {
-  const response = await AdminContactServices.getAdminContactFromDB(
-    req.params.id,
-  );
-
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: 'Admin contact retrieved successfully',
     data: response,
   });
 });
 
+
+
 const updateAdminContact = catchAsync(async (req, res) => {
-  const response = await AdminContactServices.updateAdminContactIntoDB(
-    req.params.id,
-    req.body,
-  );
+  const payload = {
+    ...req.body,
+  };
+  const response = await AdminContactServices.updateAdminContactIntoDB(payload);
 
   sendResponse(res, {
     statusCode: 200,
@@ -56,35 +42,11 @@ const updateAdminContact = catchAsync(async (req, res) => {
   });
 });
 
-const deleteAdminContact = catchAsync(async (req, res) => {
-  const response = await AdminContactServices.deleteAdminContactFromDB(
-    req.params.id,
-  );
 
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: 'Admin contact deleted successfully',
-    data: response,
-  });
-});
 
-const getActiveAdminContact = catchAsync(async (req, res) => {
-  const response = await AdminContactServices.getActiveAdminContactFromDB();
-
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: 'Active admin contact retrieved successfully',
-    data: response,
-  });
-});
 
 export const AdminContactController = {
   createAdminContact,
   getAdminContacts,
-  getAdminContact,
   updateAdminContact,
-  deleteAdminContact,
-  getActiveAdminContact,
 };

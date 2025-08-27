@@ -10,6 +10,10 @@ import { AdminContactRoutes } from '../modules/admin-contact/admin-contact.route
 import { ProjectRoutes } from '../modules/project/project.routes';
 import { FaqsRoutes } from '../modules/faqs/faq.routes';
 import BannerRoutes from '../modules/banner/banner.routes';
+import { TestimonialRoutes } from '../modules/testimonial/testimonial.routes';
+import { FooterRoutes } from '../modules/footer/footer.routes';
+import { TermsConditonsRoutes } from '../modules/terms-conditions/terms-condition.routes';
+import { PrivacyPolicyRoutes } from '../modules/privacy-policy/privacy-policy.routes';
 
 const router = Router();
 
@@ -53,6 +57,22 @@ const moduleRoutes: TModuleRoute[] = [
   {
     path: '/faqs',
     route: FaqsRoutes,
+  },
+  {
+    path: '/testimonials',
+    route: TestimonialRoutes,
+  },
+  {
+    path: '/footer',
+    route: FooterRoutes,
+  },
+  {
+    path: '/terms-and-conditions',
+    route: TermsConditonsRoutes,
+  },
+  {
+    path: '/privacy-policy',
+    route: PrivacyPolicyRoutes,
   },
 ];
 
