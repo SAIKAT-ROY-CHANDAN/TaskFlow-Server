@@ -1,7 +1,7 @@
 import { Router } from 'express';
+import { AboutUsDetailsController } from './aboutus-details.controller';
+import { AboutUsDetailsValidation } from './aboutus-details.validation';
 import validation from '../../middlewares/validation';
-import { AdminContactValidation } from './admin-contact.validation';
-import { AdminContactController } from './admin-contact.controller';
 
 const router = Router();
 
@@ -110,9 +110,9 @@ const router = Router();
  */
 router.post(
   '/',
-  // auth([featureNames.otherPageSetup]),
-  validation(AdminContactValidation.create),
-  AdminContactController.createAdminContact,
+  //   auth([featureNames.otherPageSetup]),
+//   validation(AboutUsDetailsValidation.create),
+  AboutUsDetailsController.createAboutUsDetails,
 );
 
 /**
@@ -169,10 +169,9 @@ router.post(
  */
 router.get(
   '/',
-  // auth([featureNames.otherPageSetup]),
-  AdminContactController.getAdminContacts,
+  //   auth([featureNames.otherPageSetup]),
+  AboutUsDetailsController.getAboutUsDetails,
 );
-
 
 /**
  * @swagger
@@ -277,10 +276,9 @@ router.get(
  */
 router.put(
   '/',
-  // auth([featureNames.otherPageSetup]),
-  validation(AdminContactValidation.update),
-  AdminContactController.updateAdminContact,
+  //   auth([featureNames.otherPageSetup]),
+//   validation(AboutUsDetailsValidation.update),
+  AboutUsDetailsController.updateAboutUsDetails,
 );
 
-
-export const AdminContactRoutes = router;
+export const AboutUsDetailsRoutes = router;

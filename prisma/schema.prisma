@@ -255,7 +255,6 @@ model AboutHomeKeyPoint {
 model AboutDetails {
   id          String   @id @default(uuid())
   experience  Int
-  title       String
   description String   @db.LongText
   vision      String   @db.LongText
   mission     String   @db.LongText

@@ -14,6 +14,7 @@ import { TestimonialRoutes } from '../modules/testimonial/testimonial.routes';
 import { FooterRoutes } from '../modules/footer/footer.routes';
 import { TermsConditonsRoutes } from '../modules/terms-conditions/terms-condition.routes';
 import { PrivacyPolicyRoutes } from '../modules/privacy-policy/privacy-policy.routes';
+import { AboutUsDetailsRoutes } from '../modules/aboutus-details/aboutus-details.routes';
 
 const router = Router();
 
@@ -73,6 +74,10 @@ const moduleRoutes: TModuleRoute[] = [
   {
     path: '/privacy-policy',
     route: PrivacyPolicyRoutes,
+  },
+  {
+    path: '/aboutus-details',
+    route: AboutUsDetailsRoutes,
   },
 ];
 
