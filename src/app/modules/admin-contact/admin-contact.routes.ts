@@ -1,6 +1,4 @@
 import { Router } from 'express';
-import auth from '../../middlewares/authorization';
-import { featureNames } from '../../constant/seedRoleData';
 import validation from '../../middlewares/validation';
 import { AdminContactValidation } from './admin-contact.validation';
 import { AdminContactController } from './admin-contact.controller';
@@ -112,7 +110,7 @@ const router = Router();
  */
 router.post(
   '/',
-  auth([featureNames.adminContact]),
+  // auth([featureNames.otherPageSetup]),
   validation(AdminContactValidation.create),
   AdminContactController.createAdminContact,
 );
@@ -171,101 +169,10 @@ router.post(
  */
 router.get(
   '/',
-  auth([featureNames.adminContact]),
+  // auth([featureNames.otherPageSetup]),
   AdminContactController.getAdminContacts,
 );
 
-/**
- * @swagger
- * /admin-contacts/active:
- *   get:
- *     tags:
- *       - Admin Contacts
- *     summary: Get active admin contact information
- *     description: Retrieve the most recent (active) admin contact information (public endpoint - no authentication required)
- *     responses:
- *       200:
- *         description: Active admin contact retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ApiResponse'
- *             example:
- *               success: true
- *               statusCode: 200
- *               message: "Active admin contact retrieved successfully"
- *               data:
- *                 id: "123e4567-e89b-12d3-a456-426614174000"
- *                 phone: "+1234567890"
- *                 email: "admin@company.com"
- *                 address: "123 Main St, City, Country"
- *                 facebookUrl: "https://facebook.com/company"
- *                 linkedinUrl: "https://linkedin.com/company/company"
- *                 instagramUrl: "https://instagram.com/company"
- *                 xUrl: "https://x.com/company"
- *                 discordUrl: null
- *                 googleMapUrl: "https://maps.google.com/?q=company+location"
- *                 createdAt: "2025-08-12T10:30:00.000Z"
- *                 updatedAt: "2025-08-12T10:30:00.000Z"
- *       404:
- *         description: No admin contact found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- */
-router.get('/active', AdminContactController.getActiveAdminContact);
-
-/**
- * @swagger
- * /admin-contacts/{id}:
- *   get:
- *     tags:
- *       - Admin Contacts
- *     summary: Get admin contact by ID
- *     description: Retrieve specific admin contact information by its ID (requires authentication and admin contact permission)
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *           format: uuid
- *         description: Admin contact ID
- *         example: "123e4567-e89b-12d3-a456-426614174000"
- *     responses:
- *       200:
- *         description: Admin contact retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ApiResponse'
- *       404:
- *         description: Admin contact not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       401:
- *         description: Unauthorized - Authentication required
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       403:
- *         description: Forbidden - Insufficient permissions
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- */
-router.get(
-  '/:id',
-  auth([featureNames.adminContact]),
-  AdminContactController.getAdminContact,
-);
 
 /**
  * @swagger
@@ -370,60 +277,10 @@ router.get(
  */
 router.put(
   '/:id',
-  auth([featureNames.adminContact]),
+  // auth([featureNames.otherPageSetup]),
   validation(AdminContactValidation.update),
   AdminContactController.updateAdminContact,
 );
 
-/**
- * @swagger
- * /admin-contacts/{id}:
- *   delete:
- *     tags:
- *       - Admin Contacts
- *     summary: Delete admin contact information
- *     description: Delete existing admin contact information by its ID (requires authentication and admin contact permission)
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *           format: uuid
- *         description: Admin contact ID
- *         example: "123e4567-e89b-12d3-a456-426614174000"
- *     responses:
- *       200:
- *         description: Admin contact deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ApiResponse'
- *       404:
- *         description: Admin contact not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       401:
- *         description: Unauthorized - Authentication required
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       403:
- *         description: Forbidden - Insufficient permissions
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- */
-router.delete(
-  '/:id',
-  auth([featureNames.adminContact]),
-  AdminContactController.deleteAdminContact,
-);
 
 export const AdminContactRoutes = router;

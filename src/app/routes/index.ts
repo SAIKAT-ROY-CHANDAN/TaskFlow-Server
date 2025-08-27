@@ -15,6 +15,10 @@ import { EmployRoutes } from '../modules/employ/employ.routes';
 import { JobCircularRoutes } from '../modules/job-circular/job-circular.routes';
 import { JobApplicationRoutes } from '../modules/job-application/job-application.routes';
 import { ServiceRoutes } from '../modules/service/service.routes';
+import { TestimonialRoutes } from '../modules/testimonial/testimonial.routes';
+import { FooterRoutes } from '../modules/footer/footer.routes';
+import { TermsConditonsRoutes } from '../modules/terms-conditions/terms-condition.routes';
+import { PrivacyPolicyRoutes } from '../modules/privacy-policy/privacy-policy.routes';
 
 const router = Router();
 
@@ -78,6 +82,22 @@ const moduleRoutes: TModuleRoute[] = [
   {
     path: '/services',
     route: ServiceRoutes,
+  },
+  {
+    path: '/testimonials',
+    route: TestimonialRoutes,
+  },
+  {
+    path: '/footer',
+    route: FooterRoutes,
+  },
+  {
+    path: '/terms-and-conditions',
+    route: TermsConditonsRoutes,
+  },
+  {
+    path: '/privacy-policy',
+    route: PrivacyPolicyRoutes,
   },
 ];
 
