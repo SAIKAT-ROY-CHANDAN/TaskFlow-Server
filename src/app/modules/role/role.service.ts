@@ -48,7 +48,7 @@ const getRolesFromDB = async (query: Record<string, any>) => {
       where: rolesQuery.where,
       include: {
         roleFeature: true,
-        adminUser: true
+        departmentHeads: true
       },
     }),
     prisma.role.count({
@@ -71,7 +71,7 @@ const getRoleByIdFromDB = async (id: string) => {
     where: { id },
     include: {
       roleFeature: true,
-      adminUser: true
+      departmentHeads: true
     },
   });
 

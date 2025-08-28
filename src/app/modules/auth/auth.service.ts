@@ -247,6 +247,10 @@ const updateDepartmentHeadProfileIntoDB = async (
     data: payload,
   });
 
+  if(payload.profilePhoto && existingAdmin?.profilePhoto){
+    deleteImageFile(existingAdmin.profilePhoto);
+  }
+
   return response;
 };
 

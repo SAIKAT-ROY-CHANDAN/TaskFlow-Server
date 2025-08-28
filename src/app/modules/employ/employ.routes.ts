@@ -3,19 +3,19 @@ import auth from '../../middlewares/authorization';
 import { featureNames } from '../../constant/seedRoleData';
 import { imageUpload, uploadImages } from '../../middlewares/multer';
 import validation from '../../middlewares/validation';
-import { DepartmentHeadValidation } from './department-head.validation';
-import { DepartmentHeadController } from './department-head.controller';
+import { EmployValidation } from './employ.validation';
+import { EmployController } from './employ.controller';
 
 const router = Router();
 
 /**
  * @swagger
- * /department-heads:
+ * /employs:
  *   post:
  *     tags:
- *       - Department Heads
- *     summary: Create a new department head
- *     description: Create a new department head with profile photo upload (requires authentication and department heads permission)
+ *       - Employs
+ *     summary: Create a new employee
+ *     description: Create a new employee with profile photo upload (requires authentication and managements permission)
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -29,63 +29,51 @@ const router = Router();
  *               - email
  *               - phone
  *               - designation
- *               - password
- *               - roleId
  *             properties:
  *               name:
  *                 type: string
- *                 description: Department head name
- *                 example: "John Doe"
+ *                 description: Employee name
+ *                 example: "Jane Smith"
  *               email:
  *                 type: string
  *                 format: email
- *                 description: Department head email
- *                 example: "john.doe@example.com"
+ *                 description: Employee email
+ *                 example: "jane.smith@example.com"
  *               phone:
  *                 type: string
- *                 description: Department head phone number
+ *                 description: Employee phone number
  *                 example: "+1234567890"
  *               designation:
  *                 type: string
- *                 description: Department head designation
- *                 example: "Software Engineering Manager"
- *               password:
- *                 type: string
- *                 format: password
- *                 description: Department head password
- *                 example: "password123"
- *               roleId:
- *                 type: string
- *                 format: uuid
- *                 description: Role ID for the department head
- *                 example: "123e4567-e89b-12d3-a456-426614174000"
+ *                 description: Employee designation
+ *                 example: "Software Developer"
  *               linkedinUrl:
  *                 type: string
  *                 format: url
  *                 description: LinkedIn profile URL (optional)
- *                 example: "https://linkedin.com/in/johndoe"
+ *                 example: "https://linkedin.com/in/janesmith"
  *               facebookUrl:
  *                 type: string
  *                 format: url
  *                 description: Facebook profile URL (optional)
- *                 example: "https://facebook.com/johndoe"
+ *                 example: "https://facebook.com/janesmith"
  *               instagramUrl:
  *                 type: string
  *                 format: url
  *                 description: Instagram profile URL (optional)
- *                 example: "https://instagram.com/johndoe"
+ *                 example: "https://instagram.com/janesmith"
  *               xUrl:
  *                 type: string
  *                 format: url
  *                 description: X (Twitter) profile URL (optional)
- *                 example: "https://x.com/johndoe"
+ *                 example: "https://x.com/janesmith"
  *               profilePhoto:
  *                 type: string
  *                 format: binary
  *                 description: Profile photo file (optional)
  *     responses:
  *       201:
- *         description: Department head created successfully
+ *         description: Employee created successfully
  *         content:
  *           application/json:
  *             schema:
@@ -93,19 +81,15 @@ const router = Router();
  *             example:
  *               success: true
  *               statusCode: 201
- *               message: "Department head created successfully"
+ *               message: "Employee created successfully"
  *               data:
  *                 id: "123e4567-e89b-12d3-a456-426614174000"
- *                 name: "John Doe"
- *                 email: "john.doe@example.com"
+ *                 name: "Jane Smith"
+ *                 email: "jane.smith@example.com"
  *                 phone: "+1234567890"
- *                 designation: "Software Engineering Manager"
- *                 roleId: "123e4567-e89b-12d3-a456-426614174001"
+ *                 designation: "Software Developer"
  *                 profilePhoto: "https://example.com/profile.jpg"
- *                 linkedinUrl: "https://linkedin.com/in/johndoe"
- *                 role:
- *                   id: "123e4567-e89b-12d3-a456-426614174001"
- *                   name: "Manager"
+ *                 linkedinUrl: "https://linkedin.com/in/janesmith"
  *                 createdAt: "2025-08-12T10:30:00.000Z"
  *                 updatedAt: "2025-08-12T10:30:00.000Z"
  *       400:
@@ -132,18 +116,18 @@ router.post(
   auth([featureNames.managements]),
   imageUpload.single('profilePhoto'),
   uploadImages,
-  validation(DepartmentHeadValidation.create),
-  DepartmentHeadController.createDepartmentHead,
+  validation(EmployValidation.create),
+  EmployController.createEmploy,
 );
 
 /**
  * @swagger
- * /department-heads:
+ * /employs:
  *   get:
  *     tags:
- *       - Department Heads
- *     summary: Get all department heads
- *     description: Retrieve a list of all department heads (public endpoint - no authentication required)
+ *       - Employs
+ *     summary: Get all employees
+ *     description: Retrieve a list of all employees (public endpoint - no authentication required)
  *     parameters:
  *       - in: query
  *         name: page
@@ -158,24 +142,17 @@ router.post(
  *           type: integer
  *           minimum: 1
  *           maximum: 100
- *         description: Number of department heads per page
+ *         description: Number of employees per page
  *         example: 10
- *       - in: query
- *         name: roleId
- *         schema:
- *           type: string
- *           format: uuid
- *         description: Filter department heads by role ID
- *         example: "123e4567-e89b-12d3-a456-426614174000"
  *       - in: query
  *         name: searchTerm
  *         schema:
  *           type: string
- *         description: Search department heads by name, email, or designation
- *         example: "john"
+ *         description: Search employees by name, email, or designation
+ *         example: "jane"
  *     responses:
  *       200:
- *         description: Department heads retrieved successfully
+ *         description: Employees retrieved successfully
  *         content:
  *           application/json:
  *             schema:
@@ -183,19 +160,15 @@ router.post(
  *             example:
  *               success: true
  *               statusCode: 200
- *               message: "Department heads retrieved successfully"
+ *               message: "Employees retrieved successfully"
  *               data:
  *                 - id: "123e4567-e89b-12d3-a456-426614174000"
- *                   name: "John Doe"
- *                   email: "john.doe@example.com"
+ *                   name: "Jane Smith"
+ *                   email: "jane.smith@example.com"
  *                   phone: "+1234567890"
- *                   designation: "Software Engineering Manager"
- *                   roleId: "123e4567-e89b-12d3-a456-426614174001"
+ *                   designation: "Software Developer"
  *                   profilePhoto: "https://example.com/profile.jpg"
- *                   linkedinUrl: "https://linkedin.com/in/johndoe"
- *                   role:
- *                     id: "123e4567-e89b-12d3-a456-426614174001"
- *                     name: "Manager"
+ *                   linkedinUrl: "https://linkedin.com/in/janesmith"
  *                   createdAt: "2025-08-12T10:30:00.000Z"
  *                   updatedAt: "2025-08-12T10:30:00.000Z"
  *               meta:
@@ -209,64 +182,16 @@ router.post(
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/', DepartmentHeadController.getDepartmentHeads);
+router.get('/', EmployController.getEmploys);
 
 /**
  * @swagger
- * /department-heads/role/{roleId}:
+ * /employs/{id}:
  *   get:
  *     tags:
- *       - Department Heads
- *     summary: Get department heads by role
- *     description: Retrieve department heads filtered by role ID (public endpoint - no authentication required)
- *     parameters:
- *       - in: path
- *         name: roleId
- *         required: true
- *         schema:
- *           type: string
- *           format: uuid
- *         description: Role ID
- *         example: "123e4567-e89b-12d3-a456-426614174000"
- *     responses:
- *       200:
- *         description: Department heads by role retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ApiResponse'
- *             example:
- *               success: true
- *               statusCode: 200
- *               message: "Department heads by role retrieved successfully"
- *               data:
- *                 - id: "123e4567-e89b-12d3-a456-426614174000"
- *                   name: "John Doe"
- *                   email: "john.doe@example.com"
- *                   phone: "+1234567890"
- *                   designation: "Software Engineering Manager"
- *                   roleId: "123e4567-e89b-12d3-a456-426614174001"
- *                   profilePhoto: "https://example.com/profile.jpg"
- *                   role:
- *                     id: "123e4567-e89b-12d3-a456-426614174001"
- *                     name: "Manager"
- *       404:
- *         description: No department heads found for this role
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- */
-router.get('/role/:roleId', DepartmentHeadController.getDepartmentHeadsByRole);
-
-/**
- * @swagger
- * /department-heads/{id}:
- *   get:
- *     tags:
- *       - Department Heads
- *     summary: Get a department head by ID
- *     description: Retrieve a specific department head by its ID (public endpoint - no authentication required)
+ *       - Employs
+ *     summary: Get an employee by ID
+ *     description: Retrieve a specific employee by its ID (public endpoint - no authentication required)
  *     parameters:
  *       - in: path
  *         name: id
@@ -274,11 +199,11 @@ router.get('/role/:roleId', DepartmentHeadController.getDepartmentHeadsByRole);
  *         schema:
  *           type: string
  *           format: uuid
- *         description: Department Head ID
+ *         description: Employee ID
  *         example: "123e4567-e89b-12d3-a456-426614174000"
  *     responses:
  *       200:
- *         description: Department head retrieved successfully
+ *         description: Employee retrieved successfully
  *         content:
  *           application/json:
  *             schema:
@@ -286,26 +211,22 @@ router.get('/role/:roleId', DepartmentHeadController.getDepartmentHeadsByRole);
  *             example:
  *               success: true
  *               statusCode: 200
- *               message: "Department head retrieved successfully"
+ *               message: "Employee retrieved successfully"
  *               data:
  *                 id: "123e4567-e89b-12d3-a456-426614174000"
- *                 name: "John Doe"
- *                 email: "john.doe@example.com"
+ *                 name: "Jane Smith"
+ *                 email: "jane.smith@example.com"
  *                 phone: "+1234567890"
- *                 designation: "Software Engineering Manager"
- *                 roleId: "123e4567-e89b-12d3-a456-426614174001"
+ *                 designation: "Software Developer"
  *                 profilePhoto: "https://example.com/profile.jpg"
- *                 linkedinUrl: "https://linkedin.com/in/johndoe"
- *                 facebookUrl: "https://facebook.com/johndoe"
- *                 instagramUrl: "https://instagram.com/johndoe"
- *                 xUrl: "https://x.com/johndoe"
- *                 role:
- *                   id: "123e4567-e89b-12d3-a456-426614174001"
- *                   name: "Manager"
+ *                 linkedinUrl: "https://linkedin.com/in/janesmith"
+ *                 facebookUrl: "https://facebook.com/janesmith"
+ *                 instagramUrl: "https://instagram.com/janesmith"
+ *                 xUrl: "https://x.com/janesmith"
  *                 createdAt: "2025-08-12T10:30:00.000Z"
  *                 updatedAt: "2025-08-12T10:30:00.000Z"
  *       404:
- *         description: Department head not found
+ *         description: Employee not found
  *         content:
  *           application/json:
  *             schema:
@@ -317,16 +238,16 @@ router.get('/role/:roleId', DepartmentHeadController.getDepartmentHeadsByRole);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/:id', DepartmentHeadController.getDepartmentHead);
+router.get('/:id', EmployController.getEmploy);
 
 /**
  * @swagger
- * /department-heads/{id}:
+ * /employs/{id}:
  *   put:
  *     tags:
- *       - Department Heads
- *     summary: Update a department head
- *     description: Update an existing department head by its ID with optional profile photo upload (requires authentication and department heads permission)
+ *       - Employs
+ *     summary: Update an employee
+ *     description: Update an existing employee by its ID with optional profile photo upload (requires authentication and managements permission)
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -336,7 +257,7 @@ router.get('/:id', DepartmentHeadController.getDepartmentHead);
  *         schema:
  *           type: string
  *           format: uuid
- *         description: Department Head ID
+ *         description: Employee ID
  *         example: "123e4567-e89b-12d3-a456-426614174000"
  *     requestBody:
  *       required: true
@@ -347,58 +268,48 @@ router.get('/:id', DepartmentHeadController.getDepartmentHead);
  *             properties:
  *               name:
  *                 type: string
- *                 description: Updated department head name
- *                 example: "John Smith"
+ *                 description: Updated employee name
+ *                 example: "Jane Doe"
  *               email:
  *                 type: string
  *                 format: email
- *                 description: Updated department head email
- *                 example: "john.smith@example.com"
+ *                 description: Updated employee email
+ *                 example: "jane.doe@example.com"
  *               phone:
  *                 type: string
- *                 description: Updated department head phone number
+ *                 description: Updated employee phone number
  *                 example: "+1234567891"
  *               designation:
  *                 type: string
- *                 description: Updated department head designation
- *                 example: "Senior Software Engineering Manager"
- *               password:
- *                 type: string
- *                 format: password
- *                 description: Updated department head password
- *                 example: "newpassword123"
- *               roleId:
- *                 type: string
- *                 format: uuid
- *                 description: Updated role ID for the department head
- *                 example: "123e4567-e89b-12d3-a456-426614174002"
+ *                 description: Updated employee designation
+ *                 example: "Senior Software Developer"
  *               linkedinUrl:
  *                 type: string
  *                 format: url
  *                 description: Updated LinkedIn profile URL (optional)
- *                 example: "https://linkedin.com/in/johnsmith"
+ *                 example: "https://linkedin.com/in/janedoe"
  *               facebookUrl:
  *                 type: string
  *                 format: url
  *                 description: Updated Facebook profile URL (optional)
- *                 example: "https://facebook.com/johnsmith"
+ *                 example: "https://facebook.com/janedoe"
  *               instagramUrl:
  *                 type: string
  *                 format: url
  *                 description: Updated Instagram profile URL (optional)
- *                 example: "https://instagram.com/johnsmith"
+ *                 example: "https://instagram.com/janedoe"
  *               xUrl:
  *                 type: string
  *                 format: url
  *                 description: Updated X (Twitter) profile URL (optional)
- *                 example: "https://x.com/johnsmith"
+ *                 example: "https://x.com/janedoe"
  *               profilePhoto:
  *                 type: string
  *                 format: binary
  *                 description: Updated profile photo file (optional)
  *     responses:
  *       200:
- *         description: Department head updated successfully
+ *         description: Employee updated successfully
  *         content:
  *           application/json:
  *             schema:
@@ -406,19 +317,15 @@ router.get('/:id', DepartmentHeadController.getDepartmentHead);
  *             example:
  *               success: true
  *               statusCode: 200
- *               message: "Department head updated successfully"
+ *               message: "Employee updated successfully"
  *               data:
  *                 id: "123e4567-e89b-12d3-a456-426614174000"
- *                 name: "John Smith"
- *                 email: "john.smith@example.com"
+ *                 name: "Jane Doe"
+ *                 email: "jane.doe@example.com"
  *                 phone: "+1234567891"
- *                 designation: "Senior Software Engineering Manager"
- *                 roleId: "123e4567-e89b-12d3-a456-426614174002"
+ *                 designation: "Senior Software Developer"
  *                 profilePhoto: "https://example.com/updated-profile.jpg"
- *                 linkedinUrl: "https://linkedin.com/in/johnsmith"
- *                 role:
- *                   id: "123e4567-e89b-12d3-a456-426614174002"
- *                   name: "Senior Manager"
+ *                 linkedinUrl: "https://linkedin.com/in/janedoe"
  *                 createdAt: "2025-08-12T10:30:00.000Z"
  *                 updatedAt: "2025-08-12T11:30:00.000Z"
  *       400:
@@ -428,7 +335,7 @@ router.get('/:id', DepartmentHeadController.getDepartmentHead);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
- *         description: Department head not found
+ *         description: Employee not found
  *         content:
  *           application/json:
  *             schema:
@@ -451,18 +358,18 @@ router.put(
   auth([featureNames.managements]),
   imageUpload.single('profilePhoto'),
   uploadImages,
-  validation(DepartmentHeadValidation.update),
-  DepartmentHeadController.updateDepartmentHead,
+  validation(EmployValidation.update),
+  EmployController.updateEmploy,
 );
 
 /**
  * @swagger
- * /department-heads/{id}:
+ * /employs/{id}:
  *   delete:
  *     tags:
- *       - Department Heads
- *     summary: Delete a department head
- *     description: Delete an existing department head by its ID (requires authentication and department heads permission)
+ *       - Employs
+ *     summary: Delete an employee
+ *     description: Delete an existing employee by its ID (requires authentication and managements permission)
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -472,11 +379,11 @@ router.put(
  *         schema:
  *           type: string
  *           format: uuid
- *         description: Department Head ID
+ *         description: Employee ID
  *         example: "123e4567-e89b-12d3-a456-426614174000"
  *     responses:
  *       200:
- *         description: Department head deleted successfully
+ *         description: Employee deleted successfully
  *         content:
  *           application/json:
  *             schema:
@@ -484,10 +391,10 @@ router.put(
  *             example:
  *               success: true
  *               statusCode: 200
- *               message: "Department head deleted successfully"
+ *               message: "Employee deleted successfully"
  *               data: null
  *       404:
- *         description: Department head not found
+ *         description: Employee not found
  *         content:
  *           application/json:
  *             schema:
@@ -514,7 +421,7 @@ router.put(
 router.delete(
   '/:id',
   auth([featureNames.managements]),
-  DepartmentHeadController.deleteDepartmentHead,
+  EmployController.deleteEmploy,
 );
 
-export const DepartmentHeadRoutes = router;
+export const EmployRoutes = router;
