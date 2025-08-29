@@ -3,10 +3,7 @@ import { z } from "zod";
 const createAboutUsDetailsValidationSchema = z.object({
   body: z.object({
     experience: z
-      .string({ required_error: "Experience is required" })
-      .refine((val) => !isNaN(Number(val)), {
-        message: "Experience must be a number",
-      }),
+      .number({ required_error: "Experience is required" }),
     description: z
       .string({ required_error: "Description is required" })
       .min(1, "Description is required"),
@@ -25,11 +22,8 @@ const createAboutUsDetailsValidationSchema = z.object({
 const updateAboutUsDetailsValidationSchema = z.object({
   body: z.object({
     experience: z
-      .string()
-      .optional()
-      .refine((val) => (val === undefined ? true : !isNaN(Number(val))), {
-        message: "Experience must be a number",
-      }),
+      .number()
+      .optional(),
     description: z.string().optional(),
     mission: z.string().optional(),
     vision: z.string().optional(),

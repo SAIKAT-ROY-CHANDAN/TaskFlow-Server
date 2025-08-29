@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { AboutUsDetailsController } from './aboutus-details.controller';
 import { AboutUsDetailsValidation } from './aboutus-details.validation';
 import validation from '../../middlewares/validation';
+import auth from '../../middlewares/authorization';
+import { featureNames } from '../../constant/seedRoleData';
 
 const router = Router();
 
@@ -110,8 +112,8 @@ const router = Router();
  */
 router.post(
   '/',
-  //   auth([featureNames.otherPageSetup]),
-//   validation(AboutUsDetailsValidation.create),
+  auth([featureNames.otherPageSetup]),
+  validation(AboutUsDetailsValidation.create),
   AboutUsDetailsController.createAboutUsDetails,
 );
 
@@ -276,8 +278,8 @@ router.get(
  */
 router.put(
   '/',
-  //   auth([featureNames.otherPageSetup]),
-//   validation(AboutUsDetailsValidation.update),
+  auth([featureNames.otherPageSetup]),
+  validation(AboutUsDetailsValidation.update),
   AboutUsDetailsController.updateAboutUsDetails,
 );
 
