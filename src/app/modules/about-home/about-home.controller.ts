@@ -32,27 +32,16 @@ const createAboutHome = catchAsync(async (req, res) => {
 });
 
 const getAboutHome = catchAsync(async (req, res) => {
-  const response = await AboutHOmeServices.getAboutHOmeFromDB(req.query);
+  const response = await AboutHOmeServices.getAboutHOmeFromDB();
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'About home retrieved successfully!',
-    meta: response.meta,
-    data: response.data,
-  });
-});
-
-const getSingleAboutHome = catchAsync(async (req, res) => {
-  const response = await AboutHOmeServices.getSingleAboutHomeFromDB();
-
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: 'About home retrieved successfully!',
+    message: 'AboutUsHome retrieved successfully',
     data: response,
   });
 });
+
 
 const updateAboutHome = catchAsync(async (req, res) => {
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
@@ -84,21 +73,10 @@ const updateAboutHome = catchAsync(async (req, res) => {
   });
 });
 
-const deleteAboutHome = catchAsync(async (req, res) => {
-  await AboutHOmeServices.deleteAboutHomeFromDB(req.params.id);
 
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: 'About home deleted successfully!',
-    data: null,
-  });
-});
 
 export const AboutHomeControllers = {
   createAboutHome,
   getAboutHome,
-  getSingleAboutHome,
   updateAboutHome,
-  deleteAboutHome,
 };

@@ -127,32 +127,6 @@ router.get('/', AboutHomeControllers.getAboutHome);
 /**
  * @swagger
  * /api/banners/{id}:
- *   get:
- *     summary: Get a banner by ID
- *     tags: [Banners]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Banner ID
- *         example: "64f5c8b2e4b0f2a3c4d5e6f7"
- *     responses:
- *       200:
- *         description: Banner retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BannerResponse'
- *       404:
- *         description: Banner not found
- */
-router.get('/details', AboutHomeControllers.getSingleAboutHome);
-
-/**
- * @swagger
- * /api/banners/{id}:
  *   patch:
  *     summary: Update a banner
  *     tags: [Banners]
@@ -226,54 +200,6 @@ router.put(
   AboutHomeControllers.updateAboutHome,
 );
 
-/**
- * @swagger
- * /api/banners/{id}:
- *   delete:
- *     summary: Delete a banner
- *     tags: [Banners]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Banner ID
- *         example: "64f5c8b2e4b0f2a3c4d5e6f7"
- *     responses:
- *       200:
- *         description: Banner deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 statusCode:
- *                   type: integer
- *                   example: 200
- *                 message:
- *                   type: string
- *                   example: "Banner deleted successfully!"
- *                 data:
- *                   type: null
- *                   example: null
- *       401:
- *         description: Unauthorized
- *       403:
- *         description: Forbidden
- *       404:
- *         description: Banner not found
- */
-router.delete(
-  '/:id',
-  auth([featureNames.otherPageSetup]),
-  AboutHomeControllers.deleteAboutHome,
-);
 
 
 export const AboutUsHome = router;
