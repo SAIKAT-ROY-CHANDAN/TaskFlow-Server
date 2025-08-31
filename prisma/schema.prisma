@@ -202,7 +202,8 @@ model Testimonial {
 model Partnership {
   id        String   @id @default(uuid())
   brandName String?
-  url       String?  @db.LongText
+  url       String?
+  logo      String?  @db.LongText
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
