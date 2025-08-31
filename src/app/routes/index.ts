@@ -19,6 +19,7 @@ import { TestimonialRoutes } from '../modules/testimonial/testimonial.routes';
 import { FooterRoutes } from '../modules/footer/footer.routes';
 import { TermsConditonsRoutes } from '../modules/terms-conditions/terms-condition.routes';
 import { PrivacyPolicyRoutes } from '../modules/privacy-policy/privacy-policy.routes';
+import { PartnershipRoutes } from '../modules/partnership/partnership.routes';
 
 const router = Router();
 
@@ -98,6 +99,10 @@ const moduleRoutes: TModuleRoute[] = [
   {
     path: '/privacy-policy',
     route: PrivacyPolicyRoutes,
+  },
+  {
+    path: '/partnerships',
+    route: PartnershipRoutes,
   },
 ];
 
