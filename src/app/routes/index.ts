@@ -19,6 +19,8 @@ import { TestimonialRoutes } from '../modules/testimonial/testimonial.routes';
 import { FooterRoutes } from '../modules/footer/footer.routes';
 import { TermsConditonsRoutes } from '../modules/terms-conditions/terms-condition.routes';
 import { PrivacyPolicyRoutes } from '../modules/privacy-policy/privacy-policy.routes';
+import { AboutUsDetailsRoutes } from '../modules/aboutus-details/aboutus-details.routes';
+import { AboutUsHome } from '../modules/about-home/about-home.routes';
 import { PartnershipRoutes } from '../modules/partnership/partnership.routes';
 import { SpecializedIndustryRoutes } from '../modules/specialized-industry/specialized-industry.routes';
 
@@ -100,6 +102,14 @@ const moduleRoutes: TModuleRoute[] = [
   {
     path: '/privacy-policy',
     route: PrivacyPolicyRoutes,
+  },
+  {
+    path: '/aboutus-details',
+    route: AboutUsDetailsRoutes,
+  },
+  {
+    path: '/aboutus-section-home',
+    route: AboutUsHome,
   },
   {
     path: '/partnerships',

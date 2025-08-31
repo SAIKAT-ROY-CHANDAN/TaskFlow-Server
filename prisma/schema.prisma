@@ -234,28 +234,30 @@ model Banner {
 }
 
 model AboutHome {
-  id               String   @id @default(uuid())
+  id               String              @id @default(uuid())
   title            String
-  description      String   @db.LongText
+  description      String              @db.LongText
   numberOfProjects Int?
   numberOfClients  Int?
-  sideImage1       String?  @db.LongText
-  sideImage2       String?  @db.LongText
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  sideImage1       String?             @db.LongText
+  sideImage2       String?             @db.LongText
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  keyPoints        AboutHomeKeyPoint[]
 }
 
 model AboutHomeKeyPoint {
-  id        String   @id @default(uuid())
-  point     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String    @id @default(uuid())
+  point       String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  aboutHomeId String
+  aboutHome   AboutHome @relation(fields: [aboutHomeId], references: [id], onDelete: Cascade)
 }
 
 model AboutDetails {
   id          String   @id @default(uuid())
   experience  Int
-  title       String
   description String   @db.LongText
   vision      String   @db.LongText
   mission     String   @db.LongText
