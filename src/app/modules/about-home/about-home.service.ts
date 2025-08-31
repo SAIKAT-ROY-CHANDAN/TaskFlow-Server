@@ -30,20 +30,18 @@ const getAboutHOmeFromDB = async () => {
 const updateAboutHomeIntoDB = async (payload: TAboutHome) => {
   const existingAboutHome = await prisma.aboutHome.findFirstOrThrow();
 
-  // Collect ids from payload (only existing ones)
-  const payloadIds = payload.keyPoints
-    ?.filter((kp) => kp.id)
-    .map((kp) => kp.id) ?? [];
+  const existingKeyPoints = payload.keyPoints?.filter(kp => kp.id);
+  const newKeyPoints = payload.keyPoints?.filter(kp => !kp.id);
 
-  // Step 1: Delete keyPoints that are in DB but not in payload
+  // Delete keyPoints that are removed
   await prisma.aboutHomeKeyPoint.deleteMany({
     where: {
       aboutHomeId: existingAboutHome.id,
-      id: { notIn: payloadIds },
+      id: { notIn: existingKeyPoints?.map(kp => kp.id) ?? [] },
     },
   });
 
-  // Step 2: Update AboutHome + upsert keyPoints
+  // Update AboutHome
   const response = await prisma.aboutHome.update({
     where: { id: existingAboutHome.id },
     data: {
@@ -55,17 +53,21 @@ const updateAboutHomeIntoDB = async (payload: TAboutHome) => {
       sideImage2: payload.sideImage2 ?? null,
 
       keyPoints: {
-        upsert: payload.keyPoints?.map((kp) => ({
-          where: { id: kp.id ?? "" },
-          create: { point: kp.point },
-          update: { point: kp.point },
-        })) ?? [],
+        ...(existingKeyPoints?.length && {
+          updateMany: existingKeyPoints.map(kp => ({
+            where: { id: kp.id },
+            data: { point: kp.point },
+          })),
+        }),
+        ...(newKeyPoints?.length && {
+          create: newKeyPoints.map(kp => ({ point: kp.point })),
+        }),
       },
     },
-    include: { keyPoints: true }, // return with updated keyPoints
+    include: { keyPoints: true },
   });
 
-  // cleanup images if changed
+  // Cleanup images if replaced
   if (
     payload.sideImage1 &&
     payload.sideImage1 !== existingAboutHome.sideImage1 &&
@@ -84,6 +86,8 @@ const updateAboutHomeIntoDB = async (payload: TAboutHome) => {
 
   return response;
 };
+
+
 
 
 
