@@ -15,6 +15,7 @@ import { FooterRoutes } from '../modules/footer/footer.routes';
 import { TermsConditonsRoutes } from '../modules/terms-conditions/terms-condition.routes';
 import { PrivacyPolicyRoutes } from '../modules/privacy-policy/privacy-policy.routes';
 import { AboutUsDetailsRoutes } from '../modules/aboutus-details/aboutus-details.routes';
+import { AboutUsHome } from '../modules/about-home/about-home.routes';
 
 const router = Router();
 
@@ -78,6 +79,10 @@ const moduleRoutes: TModuleRoute[] = [
   {
     path: '/aboutus-details',
     route: AboutUsDetailsRoutes,
+  },
+  {
+    path: '/aboutus-section-home',
+    route: AboutUsHome,
   },
 ];
 
