@@ -254,7 +254,7 @@ const router = Router();
 
 /**
  * @swagger
- * /api/v1/invoices:
+ * /invoices:
  *   post:
  *     summary: Create a new invoice
  *     description: Creates a new invoice with client, project, payment info, and items. Supports Prisma transactions for data consistency.
@@ -301,7 +301,7 @@ router.post(
 
 /**
  * @swagger
- * /api/v1/invoices:
+ * /invoices:
  *   get:
  *     summary: Get all invoices with filtering and pagination
  *     description: Retrieve a paginated list of invoices with optional filtering by status, type, client, project, and date range.
@@ -419,7 +419,7 @@ router.get('/', auth([featureNames.invoice]), InvoiceController.getInvoices);
 
 /**
  * @swagger
- * /api/v1/invoices/{id}:
+ * /invoices/{id}:
  *   get:
  *     summary: Get a specific invoice by ID
  *     description: Retrieve detailed information about a specific invoice including client, project, items, and bank information.
@@ -461,7 +461,7 @@ router.get('/:id', auth([featureNames.invoice]), InvoiceController.getInvoice);
 
 /**
  * @swagger
- * /api/v1/invoices/{id}:
+ * /invoices/{id}:
  *   put:
  *     summary: Update an existing invoice
  *     description: Update invoice details including amounts, dates, items, and bank information. Uses Prisma transactions for consistency.
@@ -559,7 +559,7 @@ router.put(
 
 /**
  * @swagger
- * /api/v1/invoices/{id}/status:
+ * /invoices/{id}/status:
  *   patch:
  *     summary: Update invoice status
  *     description: Update only the status of an invoice (e.g., from DRAFT to SENT, SENT to PAID, etc.)
@@ -617,7 +617,7 @@ router.patch(
 
 /**
  * @swagger
- * /api/v1/invoices/{id}:
+ * /invoices/{id}:
  *   delete:
  *     summary: Delete an invoice
  *     description: Permanently delete an invoice and all associated items and bank information. Uses Prisma transactions for data consistency.

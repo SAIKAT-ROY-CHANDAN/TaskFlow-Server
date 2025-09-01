@@ -384,7 +384,7 @@ model ProjectInvoice {
   id        String    @id @default(uuid())
   name      String    @unique
   message   String?   @db.LongText
-  client    Client    @relation(fields: [clientId], references: [id])
+  client    Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
   clientId  String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -425,7 +425,7 @@ model BankInfo {
   branch        String?
   paymentMethod PaymentMethod
   invoiceId     String        @unique
-  invoice       Invoice       @relation(fields: [invoiceId], references: [id])
+  invoice       Invoice       @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
   isDefault     Boolean       @default(false)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
