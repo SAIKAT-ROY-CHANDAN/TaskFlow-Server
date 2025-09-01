@@ -23,6 +23,7 @@ import { AboutUsDetailsRoutes } from '../modules/aboutus-details/aboutus-details
 import { AboutUsHome } from '../modules/about-home/about-home.routes';
 import { PartnershipRoutes } from '../modules/partnership/partnership.routes';
 import { SpecializedIndustryRoutes } from '../modules/specialized-industry/specialized-industry.routes';
+import { TechonologyRoutes } from '../modules/techonology/techonology.routes';
 
 const router = Router();
 
@@ -118,6 +119,10 @@ const moduleRoutes: TModuleRoute[] = [
   {
     path: '/specialized-industries',
     route: SpecializedIndustryRoutes,
+  },
+  {
+    path: '/techonology',
+    route: TechonologyRoutes,
   },
 ];
 
