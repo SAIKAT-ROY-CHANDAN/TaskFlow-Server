@@ -31,14 +31,17 @@ const createInvoiceIntoDB = async (payload: MajorInvoice) => {
         subtotal: payload.subtotal,
         tax: payload.tax,
         total: payload.total,
+        items: {
+          create: payload.items.map((item) => ({
+            ...item,
+          })),
+        },
       },
-    });
-
-    const invoiceItems = await prisma.invoiceItem.createMany({
-      data: payload.items.map((item) => ({
-        ...item,
-        invoiceId: invoiceRes.id,
-      })),
+      include: {
+        items: true,
+        client: true,
+        project: true,
+      },
     });
 
     const bankRes = await prisma.bankInfo.create({
@@ -54,7 +57,6 @@ const createInvoiceIntoDB = async (payload: MajorInvoice) => {
 
     return {
       invoice: invoiceRes,
-      items: invoiceItems,
       bankInfo: bankRes,
     };
   });
@@ -84,6 +86,8 @@ const getInvoicesFromDB = async (query: Record<string, any>) => {
     include: {
       items: true,
       BankInfo: true,
+      project: true,
+      client: true,
     },
   });
 

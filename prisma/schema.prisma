@@ -438,5 +438,5 @@ model InvoiceItem {
   total     Decimal  @db.Decimal(10, 2)
   invoice   Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt 
 }
