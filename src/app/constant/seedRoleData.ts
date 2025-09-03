@@ -74,7 +74,7 @@ export const seedRoleAdminData: TAdminRole = {
       index: 14,
     },
     {
-      name: 'specialized industry',
+      name: 'Specialized Industry',
       path: 'specialized-industry',
       index: 15,
     },

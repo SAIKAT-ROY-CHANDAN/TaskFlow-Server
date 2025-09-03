@@ -8,13 +8,13 @@ export const generateInvoiceId = async () => {
   const hour = String(now.getHours()).padStart(2, '0');
 
   let counter = 0;
-  const existingDonationInvoiceId = await prisma.donation.findFirst({
+  const existingInvoiceId = await prisma.invoice.findFirst({
     orderBy: { createdAt: 'desc' },
     select: { invoiceId: true },
   });
 
-  if (existingDonationInvoiceId) {
-    const lastInvoiceId = existingDonationInvoiceId.invoiceId;
+  if (existingInvoiceId) {
+    const lastInvoiceId = existingInvoiceId.invoiceId;
     if (lastInvoiceId) {
       const lastCounter = parseInt(lastInvoiceId.slice(4, 8), 8);
       counter = isNaN(lastCounter) ? 0 : lastCounter;
