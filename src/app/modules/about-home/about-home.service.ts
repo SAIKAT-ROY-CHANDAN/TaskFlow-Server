@@ -3,14 +3,15 @@ import { deleteImageFile } from '../../utils/deleteFile';
 import { TAboutHome } from '../../types/abouthome.type';
 
 const createAboutHomeIntoDB = async (payload: TAboutHome) => {
-  const result = {
-    ...payload,
-    keyPoints: {
-      create: payload.keyPoints ?? [],
-    },
-  };
   const response = await prisma.aboutHome.create({
-    data: result,
+    data: {
+      ...payload,
+      keyPoints: {
+        create: payload.keyPoints.map((point) => ({
+          point: point.point,
+        })),
+      },
+    },
   });
 
   return response;
@@ -25,19 +26,17 @@ const getAboutHOmeFromDB = async () => {
   return response;
 };
 
-
-
 const updateAboutHomeIntoDB = async (payload: TAboutHome) => {
   const existingAboutHome = await prisma.aboutHome.findFirstOrThrow();
 
-  const existingKeyPoints = payload.keyPoints?.filter(kp => kp.id);
-  const newKeyPoints = payload.keyPoints?.filter(kp => !kp.id);
+  const existingKeyPoints = payload.keyPoints?.filter((kp) => kp.id);
+  const newKeyPoints = payload.keyPoints?.filter((kp) => !kp.id);
 
   // Delete keyPoints that are removed
   await prisma.aboutHomeKeyPoint.deleteMany({
     where: {
       aboutHomeId: existingAboutHome.id,
-      id: { notIn: existingKeyPoints?.map(kp => kp.id) ?? [] },
+      id: { notIn: existingKeyPoints?.map((kp) => kp.id) ?? [] },
     },
   });
 
@@ -54,13 +53,13 @@ const updateAboutHomeIntoDB = async (payload: TAboutHome) => {
 
       keyPoints: {
         ...(existingKeyPoints?.length && {
-          updateMany: existingKeyPoints.map(kp => ({
+          updateMany: existingKeyPoints.map((kp) => ({
             where: { id: kp.id },
             data: { point: kp.point },
           })),
         }),
         ...(newKeyPoints?.length && {
-          create: newKeyPoints.map(kp => ({ point: kp.point })),
+          create: newKeyPoints.map((kp) => ({ point: kp.point })),
         }),
       },
     },
@@ -86,11 +85,6 @@ const updateAboutHomeIntoDB = async (payload: TAboutHome) => {
 
   return response;
 };
-
-
-
-
-
 
 export const AboutHOmeServices = {
   createAboutHomeIntoDB,
