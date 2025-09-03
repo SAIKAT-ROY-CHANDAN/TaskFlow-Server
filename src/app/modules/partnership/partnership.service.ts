@@ -1,6 +1,7 @@
 import { Partnership } from '@prisma/client';
 import prisma from '../../../db/db.config';
 import { builderQuery } from '../../builders/prismaBuilderQuery';
+import { deleteImageFile } from '../../utils/deleteFile';
 
 const createPartnershipIntoDB = async (payload: Partnership) => {
   const response = await prisma.partnership.create({
@@ -52,20 +53,34 @@ const updatePartnershipIntoDB = async (
   id: string,
   payload: Partial<Partnership>,
 ) => {
+  const existingPartnership = await getPartnershipFromDB(id);
+
   const response = await prisma.partnership.update({
-    where: {
-      id,
-    },
+    where: { id },
     data: payload,
   });
+
+  if (
+    payload.logo &&
+    payload.logo !== existingPartnership.logo &&
+    existingPartnership.logo
+  ) {
+    deleteImageFile(existingPartnership.logo);
+  }
 
   return response;
 };
 
 const deletePartnershipIntoDB = async (id: string) => {
+  const existingPartnership = await getPartnershipFromDB(id);
+
   const response = await prisma.partnership.delete({
     where: { id },
   });
+
+  if (existingPartnership.logo) {
+    deleteImageFile((existingPartnership as any).logo);
+  }
 
   return response;
 };

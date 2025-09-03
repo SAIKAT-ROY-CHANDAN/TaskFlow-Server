@@ -1,14 +1,20 @@
 import catchAsync from '../../utils/catchAsync';
+import { getSingleImageUrl } from '../../utils/getImageUrl';
 import sendResponse from '../../utils/sendResponse';
 import { PartnershipServices } from './partnership.service';
 
 const createPartnership = catchAsync(async (req, res) => {
-  const response = await PartnershipServices.createPartnershipIntoDB(req.body);
+  const logoUrl = req.file ? getSingleImageUrl(req, req.file) : null;
+
+  const response = await PartnershipServices.createPartnershipIntoDB({
+    ...req.body,
+    logo: logoUrl,
+  });
 
   sendResponse(res, {
     statusCode: 201,
     success: true,
-    message: 'Partnership added successfully',
+    message: 'Partnership created successfully',
     data: response,
   });
 });
@@ -41,9 +47,14 @@ const getPartnership = catchAsync(async (req, res) => {
 });
 
 const updatePartnership = catchAsync(async (req, res) => {
+  const logoUrl = req.file ? getSingleImageUrl(req, req.file) : null;
+
   const response = await PartnershipServices.updatePartnershipIntoDB(
     req.params.id,
-    req.body,
+    {
+      ...req.body,
+      logo: logoUrl,
+    },
   );
 
   sendResponse(res, {

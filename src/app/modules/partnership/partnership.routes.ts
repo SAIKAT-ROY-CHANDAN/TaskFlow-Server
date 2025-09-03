@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import auth from '../../middlewares/authorization';
 import { featureNames } from '../../constant/seedRoleData';
+import { imageUpload, uploadImages } from '../../middlewares/multer';
 import validation from '../../middlewares/validation';
 import { PartnershipValidation } from './partnership.validation';
 import { PartnershipController } from './partnership.controller';
@@ -13,23 +14,19 @@ const router = Router();
  *   schemas:
  *     Partnership:
  *       type: object
- *       required:
- *         - name
- *         - description
  *       properties:
  *         id:
  *           type: string
  *           description: The auto-generated id of the partnership
- *         name:
+ *         brandName:
  *           type: string
- *           description: The partnership name
- *         description:
+ *           description: The partnership brand name
+ *         url:
  *           type: string
- *           description: The partnership description
- *         status:
+ *           description: The partnership website URL
+ *         logo:
  *           type: string
- *           enum: [active, inactive]
- *           description: The partnership status
+ *           description: The partnership logo image URL
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -58,9 +55,22 @@ const router = Router();
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/Partnership'
+ *             type: object
+ *             properties:
+ *               brandName:
+ *                 type: string
+ *                 description: Partnership brand name
+ *                 example: "Tech Solutions Inc"
+ *               url:
+ *                 type: string
+ *                 description: Partnership website URL
+ *                 example: "https://techsolutions.com"
+ *               logo:
+ *                 type: string
+ *                 format: binary
+ *                 description: Partnership logo image file (optional)
  *     responses:
  *       201:
  *         description: Partnership created successfully
@@ -87,6 +97,8 @@ const router = Router();
 router.post(
   '/',
   auth([featureNames.clients]),
+  imageUpload.single('logo'),
+  uploadImages,
   validation(PartnershipValidation.partnershipValidation),
   PartnershipController.createPartnership,
 );
@@ -193,11 +205,24 @@ router.get('/:id', PartnershipController.getPartnership);
  *         required: true
  *         description: Partnership ID
  *     requestBody:
- *       required: true
+ *       required: false
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/Partnership'
+ *             type: object
+ *             properties:
+ *               brandName:
+ *                 type: string
+ *                 description: Updated partnership brand name
+ *                 example: "Updated Tech Solutions Inc"
+ *               url:
+ *                 type: string
+ *                 description: Updated partnership website URL
+ *                 example: "https://updated-techsolutions.com"
+ *               logo:
+ *                 type: string
+ *                 format: binary
+ *                 description: Updated partnership logo image file (optional)
  *     responses:
  *       200:
  *         description: Partnership updated successfully
@@ -226,6 +251,8 @@ router.get('/:id', PartnershipController.getPartnership);
 router.put(
   '/:id',
   auth([featureNames.clients]),
+  imageUpload.single('logo'),
+  uploadImages,
   validation(PartnershipValidation.partnershipValidation),
   PartnershipController.updatePartnership,
 );
