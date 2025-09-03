@@ -1,8 +1,6 @@
 import prisma from '../../../db/db.config';
-import { builderQuery } from '../../builders/prismaBuilderQuery';
 import { deleteImageFile } from '../../utils/deleteFile';
 import { TAboutHome } from '../../types/abouthome.type';
-
 
 const createAboutHomeIntoDB = async (payload: TAboutHome) => {
   const result = {
@@ -18,97 +16,84 @@ const createAboutHomeIntoDB = async (payload: TAboutHome) => {
   return response;
 };
 
-const getAboutHOmeFromDB = async (query: Record<string, unknown>) => {
-  const bannerQuery = builderQuery({
-    searchFields: ['title', 'subTitle', 'description'],
-    searchTerm: query.searchTerm as string,
-    filter: query.filter ? JSON.parse(query.filter as string) : {},
-    orderBy: query.orderBy ? JSON.parse(query.orderBy as string) : {},
-    page: query.page ? Number(query.page) : 1,
-    limit: query.limit ? Number(query.limit) : 10,
-  });
-
-  const totalBanners = await prisma.banner.count({ where: bannerQuery.where });
-  const currentPage = Number(query.page) || 1;
-  const totalPages = Math.ceil(totalBanners / bannerQuery.take);
-
-  const response = await prisma.banner.findMany({
-    ...bannerQuery,
-  });
-
-  return {
-    meta: {
-      totalItems: totalBanners,
-      totalPages,
-      currentPage,
+const getAboutHOmeFromDB = async () => {
+  const response = await prisma.aboutHome.findFirstOrThrow({
+    include: {
+      keyPoints: true,
     },
-    data: response,
-  };
-};
-
-const getSingleAboutHomeFromDB = async () => {
-  const response = await prisma.banner.findFirstOrThrow();
-
+  });
   return response;
 };
+
+
 
 const updateAboutHomeIntoDB = async (payload: TAboutHome) => {
-  const existingBanner = await prisma.banner.findFirstOrThrow();
-  const result = {
-    ...payload,
-    keyPoints: {
-      create: payload.keyPoints ?? [],
+  const existingAboutHome = await prisma.aboutHome.findFirstOrThrow();
+
+  const existingKeyPoints = payload.keyPoints?.filter(kp => kp.id);
+  const newKeyPoints = payload.keyPoints?.filter(kp => !kp.id);
+
+  // Delete keyPoints that are removed
+  await prisma.aboutHomeKeyPoint.deleteMany({
+    where: {
+      aboutHomeId: existingAboutHome.id,
+      id: { notIn: existingKeyPoints?.map(kp => kp.id) ?? [] },
     },
-  };
-  const response = await prisma.banner.update({
-    where: { id: existingBanner.id },
-    data: result,
   });
 
+  // Update AboutHome
+  const response = await prisma.aboutHome.update({
+    where: { id: existingAboutHome.id },
+    data: {
+      title: payload.title,
+      description: payload.description,
+      numberOfProjects: payload.numberOfProjects,
+      numberOfClients: payload.numberOfClients,
+      sideImage1: payload.sideImage1 ?? null,
+      sideImage2: payload.sideImage2 ?? null,
+
+      keyPoints: {
+        ...(existingKeyPoints?.length && {
+          updateMany: existingKeyPoints.map(kp => ({
+            where: { id: kp.id },
+            data: { point: kp.point },
+          })),
+        }),
+        ...(newKeyPoints?.length && {
+          create: newKeyPoints.map(kp => ({ point: kp.point })),
+        }),
+      },
+    },
+    include: { keyPoints: true },
+  });
+
+  // Cleanup images if replaced
   if (
     payload.sideImage1 &&
-    payload.sideImage1 !== existingBanner.sideImage1 &&
-    existingBanner.sideImage1
+    payload.sideImage1 !== existingAboutHome.sideImage1 &&
+    existingAboutHome.sideImage1
   ) {
-    deleteImageFile(existingBanner.sideImage1);
+    deleteImageFile(existingAboutHome.sideImage1);
   }
+
   if (
     payload.sideImage2 &&
-    payload.sideImage2 !== existingBanner.sideImage2 &&
-    existingBanner.sideImage2
+    payload.sideImage2 !== existingAboutHome.sideImage2 &&
+    existingAboutHome.sideImage2
   ) {
-    deleteImageFile(existingBanner.sideImage2);
+    deleteImageFile(existingAboutHome.sideImage2);
   }
 
   return response;
 };
 
-const deleteAboutHomeFromDB = async (id: string) => {
-  const existingBanner = await prisma.banner.findUniqueOrThrow({
-    where: { id },
-  });
 
-  const response = await prisma.banner.delete({
-    where: { id },
-  });
 
-  if (existingBanner.sideImage1) {
-    deleteImageFile(existingBanner.sideImage1);
-  }
-  if (existingBanner.sideImage2) {
-    deleteImageFile(existingBanner.sideImage2);
-  }
-  if (existingBanner.logo) {
-    deleteImageFile(existingBanner.logo);
-  }
 
-  return response;
-};
+
 
 export const AboutHOmeServices = {
   createAboutHomeIntoDB,
   getAboutHOmeFromDB,
-  getSingleAboutHomeFromDB,
   updateAboutHomeIntoDB,
-  deleteAboutHomeFromDB,
 };

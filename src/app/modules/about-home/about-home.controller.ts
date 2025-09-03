@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import catchAsync from '../../utils/catchAsync';
 import { getSingleImageUrl } from '../../utils/getImageUrl';
 import sendResponse from '../../utils/sendResponse';
@@ -32,30 +33,30 @@ const createAboutHome = catchAsync(async (req, res) => {
 });
 
 const getAboutHome = catchAsync(async (req, res) => {
-  const response = await AboutHOmeServices.getAboutHOmeFromDB(req.query);
+  const response = await AboutHOmeServices.getAboutHOmeFromDB();
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: 'About home retrieved successfully!',
-    meta: response.meta,
-    data: response.data,
-  });
-});
-
-const getSingleAboutHome = catchAsync(async (req, res) => {
-  const response = await AboutHOmeServices.getSingleAboutHomeFromDB();
-
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: 'About home retrieved successfully!',
+    message: 'AboutUsHome retrieved successfully',
     data: response,
   });
 });
 
+
 const updateAboutHome = catchAsync(async (req, res) => {
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+  let keyPoints = [];
+  if (req.body.keyPoints) {
+    try {
+      // If already parsed (unlikely), keep it; otherwise, parse
+      keyPoints = typeof req.body.keyPoints === "string"
+        ? JSON.parse(req.body.keyPoints)
+        : req.body.keyPoints;
+    } catch (err) {
+      keyPoints = [];
+    }
+  }
   const payload = {
     ...req.body,
     numberOfProjects: req.body.numberOfProjects
@@ -70,7 +71,7 @@ const updateAboutHome = catchAsync(async (req, res) => {
     sideImage2: files?.sideImage2?.[0]
       ? getSingleImageUrl(req, files.sideImage2[0])
       : undefined,
-    keyPoints: req.body.keyPoints ? JSON.parse(req.body.keyPoints) : [] 
+    keyPoints
   };
 
   const response = await AboutHOmeServices.updateAboutHomeIntoDB(
@@ -84,21 +85,10 @@ const updateAboutHome = catchAsync(async (req, res) => {
   });
 });
 
-const deleteAboutHome = catchAsync(async (req, res) => {
-  await AboutHOmeServices.deleteAboutHomeFromDB(req.params.id);
 
-  sendResponse(res, {
-    statusCode: 200,
-    success: true,
-    message: 'About home deleted successfully!',
-    data: null,
-  });
-});
 
 export const AboutHomeControllers = {
   createAboutHome,
   getAboutHome,
-  getSingleAboutHome,
   updateAboutHome,
-  deleteAboutHome,
 };

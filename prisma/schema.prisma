@@ -354,6 +354,14 @@ model SpecializedIndustry {
   updatedAt   DateTime @updatedAt
 }
 
+model Technology {
+  id        String   @id @default(uuid())
+  title     String   @unique
+  icon      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 enum InvoiceType {
   NORMAL
   UPGRADE
