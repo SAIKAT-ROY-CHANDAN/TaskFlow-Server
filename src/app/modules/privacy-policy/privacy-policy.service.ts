@@ -10,7 +10,7 @@ const createprivacyPolicyIntoDB = async (payload: PrivacyPolicy) => {
 };
 
 const getprivacyPolicyFromDB = async () => {
-  const response = await prisma.privacyPolicy.findFirstOrThrow();
+  const response = await prisma.privacyPolicy.findFirst();
   return response;
 };
 

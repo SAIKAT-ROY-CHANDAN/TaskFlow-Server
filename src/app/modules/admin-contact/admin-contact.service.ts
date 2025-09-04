@@ -20,13 +20,10 @@ const createAdminContactIntoDB = async (payload: AdminContactCreatePayload) => {
   return response;
 };
 
-// Get the first admin contact, return null if none exists
 const getAdminContactsFromDB = async (): Promise<AdminContact | null> => {
-  const response = await prisma.adminContact.findFirstOrThrow(); // returns null if empty
+  const response = await prisma.adminContact.findFirst(); 
   return response;
 };
-
-
 
 const updateAdminContactIntoDB = async (payload: AdminContact) => {
   const existingContactUs = await prisma.adminContact.findFirstOrThrow();
@@ -37,8 +34,6 @@ const updateAdminContactIntoDB = async (payload: AdminContact) => {
 
   return response;
 };
-
-
 
 export const AdminContactServices = {
   createAdminContactIntoDB,

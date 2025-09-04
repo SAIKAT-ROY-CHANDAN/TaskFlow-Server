@@ -18,7 +18,7 @@ const createAboutHomeIntoDB = async (payload: TAboutHome) => {
 };
 
 const getAboutHOmeFromDB = async () => {
-  const response = await prisma.aboutHome.findFirstOrThrow({
+  const response = await prisma.aboutHome.findFirst({
     include: {
       keyPoints: true,
     },
