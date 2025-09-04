@@ -12,10 +12,9 @@ import { swaggerSpec } from './app/configs/swagger.config';
 // Initialize the express application
 const app: Application = express();
 
-// Middleware to parse JSON bodies
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000', 'http://62.72.12.193'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'origin', 'accept'],
