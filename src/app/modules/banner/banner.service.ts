@@ -42,7 +42,7 @@ const getBannersFromDB = async (query: Record<string, unknown>) => {
 };
 
 const getBannerFromDB = async () => {
-  const response = await prisma.banner.findFirstOrThrow();
+  const response = await prisma.banner.findFirst();
 
   return response;
 };

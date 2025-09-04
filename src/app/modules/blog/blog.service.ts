@@ -58,7 +58,7 @@ const getBlogsFromDB = async (query: Record<string, any>) => {
 };
 
 const getBlogFromDB = async (id: string) => {
-  const response = await prisma.blog.findUniqueOrThrow({
+  const response = await prisma.blog.findFirst({
     where: { id },
     include: {
       tags: true,

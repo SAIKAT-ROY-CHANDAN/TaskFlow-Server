@@ -39,7 +39,7 @@ const getTechonologyFromDB = async (query: Record<string, any>) => {
 };
 
 const getSingleTechonologyFromDB = async (id: string) => {
-  const response = await prisma.technology.findUniqueOrThrow({
+  const response = await prisma.technology.findFirst({
     where: { id },
   });
 
