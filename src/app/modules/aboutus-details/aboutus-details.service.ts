@@ -10,7 +10,7 @@ const createAboutUsDetailsIntoDB = async (payload: AboutDetails) => {
 
 
 const getAboutUsDetailsFromDB = async () => {
-  const response = await prisma.aboutDetails.findFirstOrThrow();
+  const response = await prisma.aboutDetails.findFirst();
   return response;
 };
 
