@@ -10,13 +10,13 @@ const createFooterIntoDB = async (payload: Footer) => {
 };
 
 const getFooterFromDB = async () => {
-  const response = await prisma.footer.findFirstOrThrow();
+  const response = await prisma.footer.findFirst();
 
   return response;
 };
 
 const getSingleFooterFromDB = async (id: string) => {
-  const response = await prisma.footer.findUniqueOrThrow({
+  const response = await prisma.footer.findFirst({
     where: { id },
   });
 

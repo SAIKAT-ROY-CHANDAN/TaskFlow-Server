@@ -10,7 +10,7 @@ const createTermsConditionsIntoDB = async (payload: TermsAndCondition) => {
 };
 
 const getTermsConditionsFromDB = async () => {
-  const response = await prisma.termsAndCondition.findFirstOrThrow();
+  const response = await prisma.termsAndCondition.findFirst();
 
   return response;
 };
