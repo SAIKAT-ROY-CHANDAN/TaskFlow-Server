@@ -4,6 +4,7 @@ const create = z.object({
   body: z.object({
     name: z.string({ required_error: 'Name is required' }),
     description: z.string({ required_error: 'Description is required' }),
+    IndustryId: z.string({ required_error: 'Industry ID is required' }).uuid(),
   }),
 });
 

@@ -31,6 +31,7 @@ const getSpecializedIndustriesFromDB = async (query: Record<string, any>) => {
 
   const response = await prisma.specializedIndustry.findMany({
     ...specializedIndustryQuery,
+    include: { industry: true },
   });
 
   return {

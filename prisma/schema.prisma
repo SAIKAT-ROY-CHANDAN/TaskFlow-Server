@@ -348,10 +348,21 @@ model JobApplication {
   updatedAt        DateTime    @updatedAt
 }
 
+model Industry {
+  id                    String                @id @default(uuid())
+  name                  String
+  slogan                String
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+  specializedIndustries SpecializedIndustry[]
+}
+
 model SpecializedIndustry {
   id          String   @id @default(uuid())
   name        String
   icon        String   @db.LongText
+  IndustryId  String
+  industry    Industry @relation(fields: [IndustryId], references: [id], onDelete: Cascade)
   description String   @db.LongText
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

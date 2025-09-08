@@ -74,24 +74,29 @@ export const seedRoleAdminData: TAdminRole = {
       index: 14,
     },
     {
+      name: 'Industries',
+      path: 'industries',
+      index: 15,
+    },
+    {
       name: 'Specialized Industry',
       path: 'specialized-industry',
-      index: 15,
+      index: 16,
     },
     {
       name: 'Invoice',
       path: 'invoice',
-      index: 16,
+      index: 17,
     },
     {
       name: 'Role Management',
       path: 'role-management',
-      index: 17,
+      index: 18,
     },
     {
       name: 'Profile Details',
       path: 'profile-details',
-      index: 18,
+      index: 19,
     },
   ],
 };

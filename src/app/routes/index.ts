@@ -22,6 +22,7 @@ import { PrivacyPolicyRoutes } from '../modules/privacy-policy/privacy-policy.ro
 import { AboutUsDetailsRoutes } from '../modules/aboutus-details/aboutus-details.routes';
 import { AboutUsHome } from '../modules/about-home/about-home.routes';
 import { PartnershipRoutes } from '../modules/partnership/partnership.routes';
+import { IndustryRoutes } from '../modules/industry/industry.routes';
 import { SpecializedIndustryRoutes } from '../modules/specialized-industry/specialized-industry.routes';
 import { TechonologyRoutes } from '../modules/techonology/techonology.routes';
 import { ClientRoutes } from '../modules/client/client.routes';
@@ -138,6 +139,10 @@ const moduleRoutes: TModuleRoute[] = [
   {
     path: '/invoices',
     route: InvoiceRoutes,
+  },
+  {
+    path: '/industries',
+    route: IndustryRoutes,
   },
 ];
 
