@@ -85,9 +85,11 @@ model Contact {
 model AdminContact {
   id           String   @id @default(uuid())
   phone        String   @unique
+  phonetwo     String?  @unique
   email        String   @unique
+  emailtwo     String?  @unique
   address      String   @db.Text
-  addresstwo   String?   @db.Text
+  addresstwo   String?  @db.Text
   facebookUrl  String?  @db.Text
   linkedinUrl  String?  @db.Text
   instagramUrl String?  @db.Text
