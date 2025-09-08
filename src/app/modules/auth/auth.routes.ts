@@ -380,6 +380,8 @@ router.get(
   AuthController.getDepartmentHeads,
 );
 
+router.get("/overview-dashboard", auth([]), AuthController.overViewDashboard);
+
 /**
  * @swagger
  * /auth/me:

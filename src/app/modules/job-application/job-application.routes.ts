@@ -239,6 +239,11 @@ router.get(
   JobApplicationController.getJobApplications,
 );
 
+router.get(
+  '/export/:id',
+  JobApplicationController.exportJobApplicationsByJobCircular,
+);
+
 /**
  * @swagger
  * /job-applications/job-circular/{jobCircularId}:

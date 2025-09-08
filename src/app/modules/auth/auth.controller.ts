@@ -149,6 +149,17 @@ const deleteDepartmentHead = catchAsync(async (req, res) => {
   });
 });
 
+const overViewDashboard = catchAsync(async (req, res) => {
+  const response = await AuthServices.overViewDashboard();
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Dashboard data fetched successfully',
+    data: response,
+  });
+});
+
 export const AuthController = {
   login,
   createDepartmentHead,
@@ -160,4 +171,5 @@ export const AuthController = {
   updateDepartmentHeadProfile,
   getDepartmentHeads,
   deleteDepartmentHead,
+  overViewDashboard,
 };

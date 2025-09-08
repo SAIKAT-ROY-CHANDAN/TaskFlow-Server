@@ -247,7 +247,7 @@ const updateDepartmentHeadProfileIntoDB = async (
     data: payload,
   });
 
-  if(payload.profilePhoto && existingAdmin?.profilePhoto){
+  if (payload.profilePhoto && existingAdmin?.profilePhoto) {
     deleteImageFile(existingAdmin.profilePhoto);
   }
 
@@ -290,7 +290,10 @@ const getDepartmentHeadsFromDB = async (query: Record<string, any>) => {
   };
 };
 
-const deleteDepartmentHeadFromDB = async (loggedUser: JwtPayload, id: string) => {
+const deleteDepartmentHeadFromDB = async (
+  loggedUser: JwtPayload,
+  id: string,
+) => {
   const existingDepartmentHead = await prisma.departmentHead.findUnique({
     where: { id },
   });
@@ -314,6 +317,127 @@ const deleteDepartmentHeadFromDB = async (loggedUser: JwtPayload, id: string) =>
   return response;
 };
 
+const overViewDashboard = async () => {
+  const response = await prisma.$transaction(async (prisma) => {
+    const totalClients = await prisma.client.count();
+    const totalProjects = await prisma.projectInvoice.count();
+    const totalContacts = await prisma.contact.count();
+    const totalRevenue = await prisma.invoice.aggregate({
+      _sum: {
+        total: true,
+      },
+    });
+
+    const newClientOnBoard = await prisma.client.findFirst({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      select: {
+        createdAt: true,
+        name: true,
+      },
+    });
+
+    const projectCompletedDate = await prisma.projectInvoice.findFirst({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      select: {
+        createdAt: true,
+        name: true,
+      },
+    });
+
+    const newContactReceived = await prisma.contact.findFirst({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      select: {
+        createdAt: true,
+        name: true,
+      },
+    });
+
+    const newInvoiceReceived = await prisma.invoice.findFirst({
+      orderBy: {
+        createdAt: 'desc',
+      },
+      select: {
+        createdAt: true,
+        invoiceId: true,
+      },
+    });
+
+    const monthlyData = await Promise.all(
+      [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ].map(async (month, index) => {
+        const monthStart = new Date(new Date().getFullYear(), index, 1);
+        const monthEnd = new Date(new Date().getFullYear(), index + 1, 0);
+
+        const [clients, projects, contacts] = await Promise.all([
+          prisma.client.count({
+            where: {
+              createdAt: {
+                gte: monthStart,
+                lte: monthEnd,
+              },
+            },
+          }),
+          prisma.projectInvoice.count({
+            where: {
+              createdAt: {
+                gte: monthStart,
+                lte: monthEnd,
+              },
+            },
+          }),
+          prisma.contact.count({
+            where: {
+              createdAt: {
+                gte: monthStart,
+                lte: monthEnd,
+              },
+            },
+          }),
+        ]);
+
+        return {
+          name: month,
+          clients,
+          projects,
+          contacts,
+        };
+      }),
+    );
+
+    return {
+      totalClients,
+      totalProjects,
+      totalContacts,
+      totalRevenue: totalRevenue._sum.total || 0,
+      newClientOnBoard: newClientOnBoard,
+      projectCompletedDate: projectCompletedDate,
+      newContactReceived: newContactReceived,
+      newInvoiceReceived: newInvoiceReceived,
+      monthlyData,
+    };
+  });
+
+  return response;
+};
+
 export const AuthServices = {
   createDepartmentHeadIntoDB,
   loginIntoDB,
@@ -325,4 +449,5 @@ export const AuthServices = {
   updateDepartmentHeadProfileIntoDB,
   getDepartmentHeadsFromDB,
   deleteDepartmentHeadFromDB,
+  overViewDashboard,
 };

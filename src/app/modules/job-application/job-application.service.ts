@@ -2,6 +2,7 @@ import { JobApplication } from '@prisma/client';
 import prisma from '../../../db/db.config';
 import { builderQuery } from '../../builders/prismaBuilderQuery';
 import { deleteFile } from '../../utils/deleteFile';
+import { json2csv } from 'json-2-csv';
 
 const createJobApplicationIntoDB = async (payload: JobApplication) => {
   const response = await prisma.jobApplication.create({
@@ -144,6 +145,40 @@ const getJobApplicationsByJobCircularFromDB = async (
   };
 };
 
+const exportJobApplicationsByJobCircularFromDB = async (id: string) => {
+  const response = await prisma.jobApplication.findMany({
+    where: {
+      jobCircularId: id,
+    },
+  });
+
+  const convertedCSVData = await json2csv(response, {
+    emptyFieldValue: '',
+    prependHeader: true,
+    keys: [
+      'fullName',
+      'email',
+      'phoneNumber',
+      'address',
+      'gender',
+      'highestEducation',
+      'schoolName',
+      'expectedSalary',
+      'previousCompany',
+      'previousPosition',
+      'resume',
+      'coverLetter',
+      'facebookProfile',
+      'linkedinProfile',
+      'githubProfile',
+      'portfolio',
+      'createdAt',
+    ],
+  });
+
+  return convertedCSVData;
+};
+
 export const JobApplicationServices = {
   createJobApplicationIntoDB,
   getJobApplicationsFromDB,
@@ -151,4 +186,5 @@ export const JobApplicationServices = {
   updateJobApplicationIntoDB,
   deleteJobApplicationFromDB,
   getJobApplicationsByJobCircularFromDB,
+  exportJobApplicationsByJobCircularFromDB,
 };

@@ -107,6 +107,25 @@ const getJobApplicationsByJobCircular = catchAsync(async (req, res) => {
   });
 });
 
+const exportJobApplicationsByJobCircular = catchAsync(async (req, res) => {
+  const response =
+    await JobApplicationServices.exportJobApplicationsByJobCircularFromDB(
+      req.params.id,
+    );
+
+  if (!response) {
+    return sendResponse(res, {
+      statusCode: 404,
+      success: false,
+      message: 'No job applications found for this job circular',
+    });
+  }
+
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', 'attachment; filename=job_applications.csv');
+  res.status(200).send(response);
+});
+
 export const JobApplicationController = {
   createJobApplication,
   getJobApplications,
@@ -114,4 +133,5 @@ export const JobApplicationController = {
   updateJobApplication,
   deleteJobApplication,
   getJobApplicationsByJobCircular,
+  exportJobApplicationsByJobCircular,
 };
