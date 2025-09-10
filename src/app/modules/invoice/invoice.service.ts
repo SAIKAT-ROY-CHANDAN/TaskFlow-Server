@@ -1,6 +1,6 @@
 import { Invoice, InvoiceItem, PaymentMethod } from '@prisma/client';
 import prisma from '../../../db/db.config';
-import { generateInvoiceId } from '../../utils/generateInvoiceId';
+// import { generateInvoiceId } from '../../utils/generateInvoiceId';
 import { builderQuery } from '../../builders/prismaBuilderQuery';
 
 type MajorInvoice = Invoice & {
@@ -14,11 +14,11 @@ type MajorInvoice = Invoice & {
 
 const createInvoiceIntoDB = async (payload: MajorInvoice) => {
   const response = await prisma.$transaction(async (prisma) => {
-    const invoiceId = await generateInvoiceId();
+    // const invoiceId = await generateInvoiceId();
 
     const invoiceRes = await prisma.invoice.create({
       data: {
-        invoiceId,
+        invoiceId: payload.invoiceId,
         dueDate: payload.dueDate,
         issueDate: payload.issueDate,
         type: payload.type,

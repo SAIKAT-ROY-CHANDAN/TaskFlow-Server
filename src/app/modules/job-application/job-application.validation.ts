@@ -20,9 +20,9 @@ const createJobApplicationValidationSchema = z.object({
     facebookProfile: z.string({
       required_error: 'Facebook profile is required',
     }),
-    linkedinProfile: z.string().url('Invalid LinkedIn URL').optional(),
-    githubProfile: z.string().url('Invalid GitHub URL').optional(),
-    portfolio: z.string().url('Invalid portfolio URL').optional(),
+    linkedinProfile: z.string().optional(),
+    githubProfile: z.string().optional(),
+    portfolio: z.string().optional(),
     jobCircularId: z.string({ required_error: 'Job circular ID is required' }),
   }),
 });
