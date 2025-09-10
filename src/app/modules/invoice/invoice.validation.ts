@@ -8,6 +8,7 @@ const createInvoiceValidation = z.object({
       { required_error: 'Type is required' },
     ),
     clientId: z.string().uuid({ message: 'Invalid client ID' }),
+    invoiceId: z.string({ required_error: 'Invoice ID is required' }),
     projectId: z.string().uuid({ message: 'Invalid project ID' }),
     issueDate: z.string({ required_error: 'Issue date is required' }),
     dueDate: z.string({ required_error: 'Due date is required' }),

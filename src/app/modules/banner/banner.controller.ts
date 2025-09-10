@@ -13,6 +13,9 @@ const createBanner = catchAsync(async (req, res) => {
     sideImage2: files?.sideImage2?.[0]
       ? getSingleImageUrl(req, files.sideImage2[0])
       : undefined,
+    logo2: files?.logo2?.[0]
+      ? getSingleImageUrl(req, files.logo2[0])
+      : undefined,
     logo: files?.logo?.[0] ? getSingleImageUrl(req, files.logo[0]) : undefined,
   };
   const response = await BannerServices.createBannerIntoDB(payload);
@@ -57,11 +60,12 @@ const updateBanner = catchAsync(async (req, res) => {
     sideImage2: files?.sideImage2?.[0]
       ? getSingleImageUrl(req, files.sideImage2[0])
       : undefined,
+    logo2: files?.logo2?.[0]
+      ? getSingleImageUrl(req, files.logo2[0])
+      : undefined,
     logo: files?.logo?.[0] ? getSingleImageUrl(req, files.logo[0]) : undefined,
   };
-  const response = await BannerServices.updateBannerIntoDB(
-    payload,
-  );
+  const response = await BannerServices.updateBannerIntoDB(payload);
   sendResponse(res, {
     statusCode: 200,
     success: true,
