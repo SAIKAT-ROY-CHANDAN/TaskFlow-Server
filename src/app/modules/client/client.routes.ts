@@ -243,7 +243,7 @@ const router = Router();
  */
 router.post(
   '/',
-  auth([featureNames.clients]),
+  auth([featureNames.invoice]),
   validation(ClientValidation.clientValidationSchema),
   ClientController.createClient,
 );
@@ -337,7 +337,7 @@ router.post(
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/', auth([featureNames.clients]), ClientController.getClients);
+router.get('/', auth([featureNames.invoice]), ClientController.getClients);
 
 /**
  * @swagger
@@ -419,7 +419,7 @@ router.get('/', auth([featureNames.clients]), ClientController.getClients);
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/:id', auth([featureNames.clients]), ClientController.getClient);
+router.get('/:id', auth([featureNames.invoice]), ClientController.getClient);
 
 /**
  * @swagger
@@ -503,7 +503,7 @@ router.get('/:id', auth([featureNames.clients]), ClientController.getClient);
  */
 router.put(
   '/:id',
-  auth([featureNames.clients]),
+  auth([featureNames.invoice]),
   validation(ClientValidation.updateClientValidationSchema),
   ClientController.updateClient,
 );
@@ -574,7 +574,7 @@ router.put(
  */
 router.delete(
   '/:id',
-  auth([featureNames.clients]),
+  auth([featureNames.invoice]),
   ClientController.deleteClient,
 );
 
