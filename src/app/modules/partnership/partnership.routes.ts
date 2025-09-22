@@ -96,7 +96,7 @@ const router = Router();
  */
 router.post(
   '/',
-  auth([featureNames.clients]),
+  auth([featureNames.partners]),
   imageUpload.single('logo'),
   uploadImages,
   validation(PartnershipValidation.partnershipValidation),
@@ -250,7 +250,7 @@ router.get('/:id', PartnershipController.getPartnership);
  */
 router.put(
   '/:id',
-  auth([featureNames.clients]),
+  auth([featureNames.partners]),
   imageUpload.single('logo'),
   uploadImages,
   validation(PartnershipValidation.partnershipValidation),
@@ -295,7 +295,7 @@ router.put(
  */
 router.delete(
   '/:id',
-  auth([featureNames.clients]),
+  auth([featureNames.partners]),
   PartnershipController.deletePartnership,
 );
 

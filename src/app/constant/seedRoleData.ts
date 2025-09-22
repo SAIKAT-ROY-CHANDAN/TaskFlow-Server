@@ -54,7 +54,7 @@ export const seedRoleAdminData: TAdminRole = {
       index: 10,
     },
     {
-      name: 'Clients',
+      name: 'Partners',
       path: 'clients',
       index: 11,
     },
@@ -112,7 +112,7 @@ export const featureNames = {
   services: 'Services',
   managements: 'Managements',
   testimonials: 'Testimonials',
-  clients: 'Clients',
+  partners: 'Partners',
   faqs: 'FAQ`s',
   otherPageSetup: 'Other Page Setup',
   jobManagement: 'Job Management',
