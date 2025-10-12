@@ -1,6 +1,4 @@
 import { Router } from 'express';
-import auth from '../../middlewares/authorization';
-import { featureNames } from '../../constant/seedRoleData';
 import validation from '../../middlewares/validation';
 import { FaqValidation } from './faq.validation';
 import { FaqsController } from './faq.controller';
@@ -55,7 +53,6 @@ const router = Router();
  */
 router.post(
   '/',
-  auth([featureNames.faqs]),
   validation(FaqValidation.create),
   FaqsController.createFaqs,
 );
@@ -156,7 +153,6 @@ router.get('/:id', FaqsController.getSingleFaqs);
  */
 router.put(
   '/:id',
-  auth([featureNames.faqs]),
   validation(FaqValidation.update),
   FaqsController.updateFaqs,
 );
@@ -186,6 +182,6 @@ router.put(
  *       404:
  *         description: FAQ not found
  */
-router.delete('/:id', auth([featureNames.faqs]), FaqsController.deleteFaqs);
+router.delete('/:id',  FaqsController.deleteFaqs);
 
 export const FaqsRoutes = router;
