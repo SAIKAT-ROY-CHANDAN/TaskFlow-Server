@@ -7,7 +7,7 @@ export const getSinglePdfUrl = (
   file: Express.Multer.File | undefined,
 ): string | null => {
   if (!file || !file.filename) return null;
-  return `${req.protocol}://${req.get('host')}/files/${file.filename}`;
+  return `${configs.clientUrl}/files/${file.filename}`;
 };
 
 // For multiple uploaded PDF files
@@ -18,7 +18,7 @@ export const getMultiplePdfUrls = (
   if (!files || files.length === 0) return [];
   return files.map((file) => {
     if (!file.filename) return '';
-    return `${req.protocol}://${req.get('host')}/files/${file.filename}`;
+    return `${configs.clientUrl}/files/${file.filename}`;
   });
 };
 

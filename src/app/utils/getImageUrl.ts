@@ -6,7 +6,7 @@ export const getSingleImageUrl = (
   file: Express.Multer.File | undefined,
 ): string | null => {
   if (!file || !file.filename) return null; // Check if filename exists
-  return `${req.protocol}://${req.get('host')}/images/${file.filename}`;
+  return `${configs.clientUrl}/images/${file.filename}`;
 };
 
 export const getMultipleImageUrls = (
@@ -16,7 +16,7 @@ export const getMultipleImageUrls = (
   if (!files || files.length === 0) return [];
   return files.map((file) => {
     if (!file.filename) return '';
-    return `${req.protocol}://${req.get('host')}/images/${file.filename}`;
+    return `${configs.clientUrl}/images/${file.filename}`;
   });
 };
 
