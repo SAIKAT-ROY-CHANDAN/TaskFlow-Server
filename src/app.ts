@@ -1,13 +1,12 @@
+/* eslint-disable no-console */
 import express, { Application } from 'express';
 import cors from 'cors';
 import config from './app/configs';
 import router from './app/routes';
 import { globalErrorHandler } from './app/middlewares/globalErrorHandler';
 import notFoundErrorHandler from './app/middlewares/notFoundErrorHandler';
-import { seedRoleAdmin } from './app/utils/seedDepartmentHead';
 import cookieParser from 'cookie-parser';
-import swaggerUi from 'swagger-ui-express';
-import { swaggerSpec } from './app/configs/swagger.config';
+import seedAdmin from './app/seed/seedAdmin';
 
 // Initialize the express application
 const app: Application = express();
@@ -44,20 +43,12 @@ app.get('/', (req, res) => {
 // Swagger documentation setup
 app.use(
   '/api-docs',
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerSpec, {
-    customCss: '.swagger-ui .topbar { display: none }',
-    customSiteTitle: 'MNTech Foundation API Documentation',
-    swaggerOptions: {
-      persistAuthorization: true,
-    },
-  }),
+ 
 );
 
 // JSON endpoint for swagger specification
 app.get('/api-docs.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
-  res.send(swaggerSpec);
 });
 
 // Importing routes
@@ -72,6 +63,6 @@ app.use(notFoundErrorHandler);
 // Running the server
 app.listen(config.port, () => {
   // Seed the admin role if it doesn't exist
-  seedRoleAdmin();
+  seedAdmin();
   console.log(`Server is running on port ${config.port}`);
 });
