@@ -40,16 +40,6 @@ app.get('/', (req, res) => {
   });
 });
 
-// Swagger documentation setup
-app.use(
-  '/api-docs',
- 
-);
-
-// JSON endpoint for swagger specification
-app.get('/api-docs.json', (req, res) => {
-  res.setHeader('Content-Type', 'application/json');
-});
 
 // Importing routes
 app.use('/api/v1', router);
