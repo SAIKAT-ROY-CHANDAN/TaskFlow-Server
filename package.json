@@ -12,7 +12,7 @@
     "prettier": "prettier --ignore-path .gitignore --write \"./src/**/*.+(js|ts|json)\"",
     "prettier:fix": "prettier --write src"
   },
-  "author": "Sourave Halder",
+  "author": "Saikat Roy",
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^6.5.0",
