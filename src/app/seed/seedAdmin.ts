@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import bcrypt from 'bcrypt';
 import prisma from '../../db/db.config';
+import { Role } from '@prisma/client';
 
 const seedAdmin = async () => {
   try {
@@ -23,7 +24,7 @@ const seedAdmin = async () => {
         fullName: 'Admin User',
         email: 'admin@taskflow.com',
         password: hashedPassword,
-        role: 'ADMIN',
+        role: Role.ADMIN,
         avatar: null,
       },
     });
