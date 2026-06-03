@@ -7,37 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  ADMIN
-  MANAGER
-  USER
-}
-
-enum ProjectStatus {
-  ACTIVE
-  COMPLETED
-  ON_HOLD
-}
-
-enum TaskStatus {
-  TODO
-  IN_PROGRESS
-  COMPLETED
-}
-
-enum TaskPriority {
-  LOW
-  MEDIUM
-  HIGH
-}
-
 model User {
   id       String              @id @default(uuid())
   fullName String
   avatar   String?
   email    String              @unique
-  role     Role
   password String
+  role     Role
   projects ProjectTeamMember[]
   tasks    Task[]
 }
@@ -72,7 +48,30 @@ model Task {
   dueDate     String
   projectId   String
   assigneeId  String
+  assignee    User         @relation(fields: [assigneeId], references: [id], onDelete: Cascade)
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
 
-  project  Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  assignee User    @relation(fields: [assigneeId], references: [id], onDelete: Cascade)
+enum Role {
+  ADMIN
+  MANAGER
+  USER
+}
+
+enum ProjectStatus {
+  ACTIVE
+  COMPLETED
+  ON_HOLD
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
 }
